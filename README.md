@@ -3,9 +3,12 @@
 Repositório inicial para a API da NeriCare, configurado com Node.js, TypeScript e Express.
 
 ## Stack Escolhido:
-Express.js: 4.18.2+
-TypeScript: 5.3.3+
-Node.js: 24.11.1 (LTS - Suporte até 2027)
+
+Express.js: 4.18.2+,
+
+TypeScript: 5.3.3+,
+
+Node.js: 24.12.0 (LTS)
 
 ## Como Rodar
 
