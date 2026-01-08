@@ -2,14 +2,14 @@
 
 Repositório inicial para a API da NeriCare, configurado com Node.js, TypeScript e Express.
 
-## Como Rodar
+##Como Rodar
 
-Instalar dependências:
+1 - Instalar dependências:
 
 npm install
 
 
-Executar em modo desenvolvimento:
+2 - Executar em modo desenvolvimento:
 
 npm run dev
 
