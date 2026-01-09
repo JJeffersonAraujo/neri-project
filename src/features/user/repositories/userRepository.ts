@@ -1,14 +1,18 @@
 import { User } from '../types/user.types';
 
 export class UserRepository {
-  private users: User[] = [];
-
-  async findByEmail(email: string): Promise<User | null> {
-    return this.users.find(user => user.email === email) || null;
-  }
+  private static users: User[] = [];
 
   async create(user: User): Promise<User> {
-    this.users.push(user);
+    UserRepository.users.push(user);
     return user;
+  }
+
+  async findByEmail(email: string): Promise<User | undefined> {
+    return UserRepository.users.find(user => user.email === email);
+  }
+
+  async findById(id: string): Promise<User | undefined> {
+    return UserRepository.users.find(user => user.id === id);
   }
 }
