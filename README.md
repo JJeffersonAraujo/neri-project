@@ -37,3 +37,28 @@ Node.js 24.12.0(LTS)
 Express.js ^4.18.2
 
 TypeScript ^5.3.3
+
+
+# RF001 - Autenticação JWT
+
+## Funcionalidades
+- Criação de usuário
+- Login com JWT
+- Middleware de autenticação
+- Repositório em memória (temporário)
+
+## Rotas
+
+### Criar usuário
+POST /users
+
+### Login
+POST /auth/login
+
+## Autenticação
+Usar header:
+Authorization: Bearer <token>
+
+## Observações
+- Autenticação implementada sem banco de dados
+- Persistência em memória até integração com Prisma
