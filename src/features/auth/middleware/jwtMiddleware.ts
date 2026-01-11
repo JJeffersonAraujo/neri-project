@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { jwtConfig } from '../../../shared/utils/jwt.util'
 import '../../../shared/types/express.types'
 
@@ -17,7 +17,7 @@ export function authMiddleware(
   const [, token] = authHeader.split(' ')
 
   try {
-    const decoded = jwt.verify(token, jwtConfig.secret)
+    const decoded = jwt.verify(token, jwtConfig.secret) as JwtPayload
     req.user = decoded
     next()
   } catch {
