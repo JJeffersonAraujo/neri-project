@@ -10,6 +10,11 @@ TypeScript: 5.3.3+,
 
 Node.js: 24.12.0 (LTS)
 
+npm install swagger-ui-express swagger-jsdoc
+
+npm install @types/swagger-ui-express @types/swagger-jsdoc --save-dev #
+
+
 ## Como Rodar
 
 1 - Instalar dependências:
