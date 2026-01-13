@@ -17,7 +17,7 @@ const clienteRoutes = Router()
 router.use('/admins', authMiddleware, adminRoutes)
 router.use('/profissionais', authMiddleware, profissionalRoutes)
 router.use('/gestores', authMiddleware, gestorRoutes)
-router.use('/clientes', clienteRoutes) // sem auth se for cadastro público
+router.use('/clientes', clienteRoutes) 
 export { router as userRoutes }
 
 

@@ -25,7 +25,7 @@ export class AdminService {
 
 export class profissionalSaudeService {
   static async create(data: any) {
-    return { message: 'Admin criado', data }
+    return { message: 'Profissional de saúde criado', data }
   }
 
   static async findAll() {
@@ -47,7 +47,7 @@ export class profissionalSaudeService {
 
 export class gestorService {
   static async create(data: any) {
-    return { message: 'Admin criado', data }
+    return { message: 'Gestor criado', data }
   }
 
   static async findAll() {
@@ -69,7 +69,7 @@ export class gestorService {
 
 export class clienteService {
   static async create(data: any) {
-    return { message: 'Admin criado', data }
+    return { message: 'Cliente criado', data }
   }
 
   static async findAll() {
