@@ -1,14 +1,19 @@
-import { JsonController, Post, Body, HttpCode } from 'routing-controllers';
+import { JsonController, Post, Body } from 'routing-controllers';
 import { AuthService } from '../services/authService';
-import { LoginDTO } from '../dtos/loginDTO';
+import { RefreshService } from '../services/refreshService';
 
 @JsonController('/auth')
 export class AuthController {
   private authService = new AuthService();
+  private refreshService = new RefreshService();
 
   @Post('/login')
-  @HttpCode(200)
-  async login(@Body() body: LoginDTO) {
+  login(@Body() body: any) {
     return this.authService.login(body);
+  }
+
+  @Post('/refresh')
+  refresh(@Body() body: { refreshToken: string }) {
+    return this.refreshService.refresh(body.refreshToken);
   }
 }

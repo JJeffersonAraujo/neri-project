@@ -5,13 +5,19 @@
     "moduleResolution": "NodeNext",
     "rootDir": "./",
     "outDir": "./dist",
+
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+
+    "typeRoots": [
+      "./src/@types",
+      "./node_modules/@types"
+    ]
   },
   "include": ["**/*.ts"]
 }

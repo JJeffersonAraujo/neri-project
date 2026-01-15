@@ -9,27 +9,26 @@ interface JwtPayload {
   sub: string;
 }
 
-export class EnsureAuthMiddleware implements ExpressMiddlewareInterface {
-  async use(req: Request, res: Response, next: NextFunction) {
+export class EnsureAuthMiddleware
+  implements ExpressMiddlewareInterface
+{
+  async use(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
       return res.status(401).json({ message: 'Token missing' });
     }
 
-    const [scheme, token] = authHeader.split(' ');
-
-    if (scheme !== 'Bearer' || !token) {
-      return res
-        .status(401)
-        .json({ message: 'Invalid authorization format' });
-    }
+    const [, token] = authHeader.split(' ');
 
     try {
-      // ✅ usa o access token corretamente
       const decoded = jwt.verify(
         token,
-        jwtConfig.access.secret
+        jwtConfig.access.secret // ✅ AQUI ESTAVA O BUG
       ) as JwtPayload;
 
       const userRepository = new UserRepository();
@@ -39,14 +38,10 @@ export class EnsureAuthMiddleware implements ExpressMiddlewareInterface {
         return res.status(401).json({ message: 'User not found' });
       }
 
-      // 🔑 padrão esperado pelo routing-controllers
-      (req as any).user = {
-        id: user.id,
-        email: user.email,
-      };
+      (req as any).user = user;
 
       return next();
-    } catch {
+    } catch (error) {
       return res.status(401).json({ message: 'Invalid token' });
     }
   }

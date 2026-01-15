@@ -1,15 +1,28 @@
 import 'dotenv/config';
-
 import { SignOptions } from 'jsonwebtoken';
 
 interface JwtConfig {
-  secret: string;
-  signOptions: SignOptions;
+  access: {
+    secret: string;
+    options: SignOptions;
+  };
+  refresh: {
+    secret: string;
+    options: SignOptions;
+  };
 }
 
 export const jwtConfig: JwtConfig = {
-  secret: process.env.JWT_SECRET as string,
-  signOptions: {
-    expiresIn: '1d',
+  access: {
+    secret: process.env.JWT_SECRET as string,
+    options: {
+      expiresIn: '15m',
+    },
+  },
+  refresh: {
+    secret: process.env.JWT_REFRESH_SECRET as string,
+    options: {
+      expiresIn: '30d',
+    },
   },
 };
