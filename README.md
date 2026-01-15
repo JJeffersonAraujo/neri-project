@@ -1,30 +1,87 @@
-# neri-project
+# Backend API – Setup Inicial
 
-Repositório inicial para a API da NeriCare, configurado com Node.js, TypeScript e Express.
+Projeto backend desenvolvido para fins corporativos, com foco em padronização de ambiente,
+organização de código e preparação para evolução futura da aplicação.
 
-## Stack Escolhido:
+O projeto encontra-se em **fase inicial de desenvolvimento**, com arquitetura preparada
+para crescimento gradual e integração contínua.
 
-Express.js: 4.18.2+,
+---
 
-TypeScript: 5.3.3+,
+## 🚀 Stack Tecnológica
 
-Node.js: 24.12.0 (LTS)
+### Backend
+- Node.js **24.12.0 (LTS)**
+- Express.js **^4.18.2**
+- TypeScript **^5.3.3**
 
-npm install swagger-ui-express swagger-jsdoc
+### Banco de Dados
+- PostgreSQL **15+**
+- Prisma ORM **6.19.2**
+- Docker Compose (ambiente local)
 
-npm install @types/swagger-ui-express @types/swagger-jsdoc --save-dev #
+---
 
+## 🗂️ Arquitetura do Projeto
 
-## Como Rodar
+O projeto segue uma abordagem **Feature-Driven**, com separação clara de responsabilidades,
+permitindo fácil manutenção e evolução.
 
-1 - Instalar dependências:
+O banco de dados foi projetado seguindo:
+- Normalização até 3FN
+- Soft delete (`deletedAt`)
+- Auditoria (`createdAt`, `updatedAt`)
+- Índices em campos críticos
+- Migrations versionadas com Prisma
 
+---
+
+## 🐘 Banco de Dados (Desenvolvimento Local)
+
+### Serviços utilizados
+- PostgreSQL (container Docker)
+- pgAdmin (opcional)
+
+### Subir os containers
+
+docker compose up -d
+
+### Acesso
+
+PostgreSQL: localhost:5432
+
+pgAdmin: http://localhost:5050
+
+Credenciais do banco
+
+Usuário: developer
+
+Senha: dev_password_123
+
+Database: project_db
+
+### Prisma ORM
+
+Validar schema:
+npx prisma validate
+
+### Criar e aplicar migrations
+npx prisma migrate dev --name init_database
+
+### Abrir Prisma Studio
+npx prisma studio
+
+###  Como executar o projeto
+Pré-requisitos:
+Node.js 24.12.0 (LTS)
+npm
+Docker + Docker Compose
+
+### Instalação
 npm install
 
-
-2 - Executar em modo desenvolvimento:
-
+### Executar em modo desenvolvimento
 npm run dev
 
-
-Acesse: http://localhost:3000
+### Aplicação disponível em
+http://localhost:3000

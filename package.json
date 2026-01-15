@@ -1,0 +1,44 @@
+{
+  "name": "neri-project",
+  "version": "1.0.0",
+  "description": "Projeto NeriCare - Express + TypeScript",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "db:migrate": "dotenv prisma migrate dev",
+    "db:studio": "dotenv prisma studio"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JJeffersonAraujo/neri-project.git"
+  },
+  "keywords": [],
+  "author": "Jefferson Araujo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JJeffersonAraujo/neri-project/issues"
+  },
+  "homepage": "https://github.com/JJeffersonAraujo/neri-project#readme",
+  "dependencies": {
+    "@prisma/client": "^6.19.2",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.10.0",
+    "dotenv-cli": "^11.0.0",
+    "prisma": "^6.19.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.3.3"
+  }
+}
