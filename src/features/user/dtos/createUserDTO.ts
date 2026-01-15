@@ -1,5 +1,8 @@
+import { Role } from '@prisma/client';
+
 export interface CreateUserDTO {
-  name: string;
+  nome: string;      // corresponde ao campo 'nome' no banco
   email: string;
-  password: string;
+  senha: string;     // corresponde ao campo 'senhaHash' após hash
+  role: Role;        // enum: ADMIN | GESTOR | PROFISSIONAL | USER
 }

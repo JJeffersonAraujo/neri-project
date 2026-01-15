@@ -44,7 +44,6 @@ O banco de dados foi projetado seguindo:
 
 ### Subir os containers
 
-bash
 docker compose up -d
 
 ### Acesso

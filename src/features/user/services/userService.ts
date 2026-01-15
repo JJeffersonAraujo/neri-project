@@ -1,32 +1,50 @@
-import { UserRepository } from '../repositories/userRepository';
-import { CreateUserDTO } from '../dtos/createUserDTO';
-import { User } from '../types/user.types';
-import bcrypt from 'bcrypt';
-import { randomUUID } from 'crypto';
+import { prisma } from '../../../shared/database/prismaClient.js';
+import bcrypt from 'bcryptjs';
+import { Role } from '@prisma/client';
+import { CreateUserDTO } from '../dtos/createUserDTO.js';
 
 export class UserService {
-  constructor(private userRepository = new UserRepository()) {}
+  async createUser(data: CreateUserDTO) {
+    const { nome, email, senha, role } = data;
 
-  async createUser(data: CreateUserDTO): Promise<Omit<User, 'password'>> {
-    const userExists = await this.userRepository.findByEmail(data.email);
-
-    if (userExists) {
-      throw new Error('User already exists');
+    if (!nome || !email || !senha || !role) {
+      throw new Error('Campos obrigatórios: nome, email, senha e role');
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    // Validação de enum
+    if (!Object.values(Role).includes(role)) {
+      throw new Error(`Role inválida. Valores aceitos: ${Object.values(Role).join(', ')}`);
+    }
 
-    const user: User = {
-      id: randomUUID(),
-      name: data.name,
-      email: data.email,
-      password: hashedPassword,
-      createdAt: new Date(),
-    };
+    // Verifica se usuário já existe
+    const userExists = await prisma.usuario.findUnique({
+      where: { email },
+    });
 
-    await this.userRepository.create(user);
+    if (userExists) {
+      throw new Error('Usuário já existe');
+    }
 
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    // Gera hash da senha
+    const senhaHash = await bcrypt.hash(senha, 10);
+
+    // Cria usuário
+    const user = await prisma.usuario.create({
+      data: {
+        nome,
+        email,
+        senhaHash,
+        role,
+      },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+    });
+
+    return user;
   }
 }

@@ -14,6 +14,7 @@ enum Role {
   ADMIN
   GESTOR
   PROFISSIONAL
+  USER
 }
 
 /*
