@@ -23,7 +23,8 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.3",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.6",
