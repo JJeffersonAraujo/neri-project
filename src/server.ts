@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { userRoutes } from './features/user/routes/userRoutes';
+import { userRoutes } from './features/user/routes/userRoute';
 import { authRoutes } from './features/auth/routes/authRoutes';
 import { ensureAuth } from './features/auth/middleware/ensureAuth';
 
