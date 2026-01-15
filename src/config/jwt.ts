@@ -1,6 +1,15 @@
-import jwt, { Secret } from 'jsonwebtoken';
+import 'dotenv/config';
 
-export const jwtConfig = {
-  secret: 'neri-secret-key', // depois vira env
-  expiresIn: '1d',
+import { SignOptions } from 'jsonwebtoken';
+
+interface JwtConfig {
+  secret: string;
+  signOptions: SignOptions;
+}
+
+export const jwtConfig: JwtConfig = {
+  secret: process.env.JWT_SECRET as string,
+  signOptions: {
+    expiresIn: '1d',
+  },
 };

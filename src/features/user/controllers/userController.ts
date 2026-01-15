@@ -1,15 +1,31 @@
-import { Request, Response } from 'express';
-import { UserService } from '../services/userService';
+import {
+  JsonController,
+  Get,
+  Post,
+  Body,
+  CurrentUser,
+  UseBefore,
+} from 'routing-controllers';
 
+import { UserService } from '../services/userService';
+import { EnsureAuthMiddleware } from '../../../shared/middleware/EnsureAuthMiddleware';
+
+@JsonController('/users')
 export class UserController {
   private userService = new UserService();
 
-  async create(req: Request, res: Response): Promise<Response> {
-    try {
-      const user = await this.userService.createUser(req.body);
-      return res.status(201).json(user);
-    } catch (error: any) {
-      return res.status(400).json({ message: error.message });
-    }
+  @Post()
+  async create(@Body() body: any) {
+    const user = await this.userService.createUser(body);
+    return user;
+  }
+
+  @Get('/me')
+  @UseBefore(EnsureAuthMiddleware)
+  async profile(@CurrentUser() user: any) {
+    return {
+      userId: user.id,
+      email: user.email,
+    };
   }
 }

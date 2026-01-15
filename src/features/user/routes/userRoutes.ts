@@ -1,9 +1,20 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/userController';
+import { adaptController } from '../../../shared/adapters/expressControllerAdapter';
+import { EnsureAuth } from '../../../shared/decorators/EnsureAuth';
 
-const userRoutes = Router();
-const userController = new UserController();
+const router = Router();
+const controller = new UserController();
 
-userRoutes.post('/', userController.create.bind(userController));
+router.post(
+  '/',
+  adaptController(controller, 'create')
+);
 
-export { userRoutes };
+router.get(
+  '/profile',
+  EnsureAuth,
+  adaptController(controller, 'profile')
+);
+
+export { router as userRoutes };

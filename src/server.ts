@@ -1,25 +1,17 @@
-import express, { Request, Response } from 'express';
-import { userRoutes } from './features/user/routes/userRoutes';
-import { authRoutes } from './features/auth/routes/authRoutes';
-import { ensureAuth } from './features/auth/middleware/ensureAuth';
+import 'dotenv/config';
+import 'reflect-metadata';
 
-const app = express();
-app.use(express.json());
+import { createExpressServer } from 'routing-controllers';
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World');
+const app = createExpressServer({
+  controllers: [
+    __dirname + '/features/**/controllers/*.{ts,js}',
+  ],
+
+  currentUserChecker: async (action) => {
+    return action.request.user;
+  },
 });
-
-/* 🔒 ROTA DE TESTE PROTEGIDA */
-app.get('/protected', ensureAuth, (req: Request, res: Response) => {
-  return res.json({
-    message: 'Access granted',
-    userId: req.user?.id,
-  });
-});
-
-app.use('/users', userRoutes);
-app.use('/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 
