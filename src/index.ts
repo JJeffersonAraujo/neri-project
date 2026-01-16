@@ -27,10 +27,8 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
-<<<<<<<< HEAD:src/server.ts
-========
+
 
 app.listen(app, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}/docs`);
 });
->>>>>>>> devolep/task1RF002-Cadastro:src/index.ts
