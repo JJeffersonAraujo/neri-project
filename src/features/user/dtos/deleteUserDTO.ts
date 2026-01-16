@@ -8,9 +8,7 @@ const controllerProfissional = new profissionalSaudeController()
 const controllerGestor = new gestorController()
 const controllerCliente = new clienteController()
 
-router.put('/admin/:id', authMiddleware, controller.update)
-router.put('/profissional/:id', authMiddleware, controllerProfissional.update)
-router.put('/gestor/:id', authMiddleware, controllerGestor.update)
-router.put('/cliente/:id', authMiddleware, controllerCliente.update)
-
-export default router
+router.delete('/admin/:id', authMiddleware, controller.delete)
+router.delete('/profissional/:id', authMiddleware, controllerProfissional.delete)
+router.delete('/gestor/:id', authMiddleware, controllerGestor.delete)
+router.delete('/cliente/:id', authMiddleware, controllerCliente.delete)
