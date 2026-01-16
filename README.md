@@ -26,9 +26,7 @@ npm run dev
 http://localhost:3000
 
 
-### Endpoint disponível
 
-GET / → Retorna: Hello World 
 
 ### Stack utilizada
 
@@ -41,100 +39,127 @@ TypeScript ^5.3.3
 
 # RF001 - Autenticação JWT
 
-🚀 Neri Project – Autenticação JWT com Access Token, Refresh Token e Proteção de Rotas
+🚀 **Neri Project – Autenticação JWT com Swagger, Access Token, Refresh Token e Proteção de Rotas**
 
 Este projeto implementa um sistema completo de autenticação usando:
 
-Node.js + TypeScript
+- Node.js + TypeScript
+- Express com routing-controllers
+- JWT (Access Token + Refresh Token)
+- Prisma + PostgreSQL
+- Swagger (OpenAPI)
+- Proteção de rotas via decorators
+- Controle de tentativas de login
+- Bloqueio automático por excesso de erros
 
-Express com routing-controllers
+---
 
-JWT (Access Token + Refresh Token)
+## 📌 Funcionalidades Implementadas
 
-Prisma + PostgreSQL
+✅ Cadastro de usuário com senha criptografada (bcrypt)  
+✅ Login com JWT (Access Token)  
+✅ Proteção de rotas usando middleware (`EnsureAuthMiddleware`)  
+✅ Leitura automática do usuário logado (`@CurrentUser`)  
+✅ Controle de tentativas de login  
+✅ Bloqueio temporário após várias tentativas inválidas  
+✅ Estrutura preparada para Refresh Token  
+✅ Documentação automática com Swagger  
+✅ Padrão profissional com decorators (routing-controllers)  
 
-Proteção de rotas via decorators
+---
 
-Controle de tentativas de login
+## 🧱 Tecnologias
 
-Bloqueio automático por excesso de erros
+- Node.js
+- TypeScript
+- Express
+- routing-controllers
+- Prisma ORM
+- PostgreSQL
+- JSON Web Token (JWT)
+- bcrypt
+- Swagger (OpenAPI)
 
-📌 Funcionalidades Implementadas
+---
 
-✅ Cadastro de usuário com senha criptografada (bcrypt)
-✅ Login com JWT (Access Token)
-✅ Proteção de rotas usando @EnsureAuth()
-✅ Leitura automática do usuário logado (@CurrentUser())
-✅ Controle de tentativas de login
-✅ Bloqueio temporário após várias tentativas inválidas
-✅ Estrutura preparada para Refresh Token
-✅ Padrão profissional com decorators (routing-controllers)
+## ⚙️ Requisitos
 
-🧱 Tecnologias
+- Node.js >= 18
+- PostgreSQL
+- npm ou yarn
 
-Node.js
+---
 
-TypeScript
+## 🛠️ Instalação (em qualquer máquina)
 
-Express
-
-routing-controllers
-
-Prisma ORM
-
-PostgreSQL
-
-JSON Web Token (JWT)
-
-bcrypt
-
-⚙️ Requisitos
-
-Node.js >= 18
-
-PostgreSQL
-
-npm ou yarn
-
-🛠️ Instalação (em qualquer máquina)
-1️⃣ Clonar o repositório
+### 1️⃣ Clonar o repositório
+```bash
 git clone https://github.com/JJeffersonAraujo/neri-project.git
 cd neri-project
-
 2️⃣ Instalar dependências
+bash
+Copiar código
 npm install
-
 🔐 Variáveis de Ambiente
-
 Crie um arquivo .env na raiz do projeto:
 
+env
+Copiar código
 DATABASE_URL="postgresql://postgres:123@localhost:5432/neri_db20"
 
 JWT_SECRET="super_access_secret"
 JWT_REFRESH_SECRET="super_refresh_secret"
-
-
 ⚠️ Ajuste usuário, senha e nome do banco conforme seu ambiente.
 
 🗄️ Banco de Dados (Prisma)
-3️⃣ Gerar e aplicar migrations
+3️⃣ Rodar migrations
+bash
+Copiar código
 npx prisma migrate dev
-
-4️⃣ Gerar o Prisma Client
+4️⃣ Gerar Prisma Client
+bash
+Copiar código
 npx prisma generate
-
 ▶️ Executar o projeto
+bash
+Copiar código
 npm run dev
-
-
 Servidor disponível em:
 
+arduino
+Copiar código
 http://localhost:3000
+📘 Swagger (Documentação da API)
+🔗 Acessar Swagger UI
+Após subir o projeto, acesse:
+
+bash
+Copiar código
+http://localhost:3000/docs
+🧪 Como testar pelo Swagger
+1️⃣ Abra /docs no navegador
+2️⃣ Vá em POST /auth/login
+3️⃣ Faça login com um usuário válido
+4️⃣ Copie o accessToken retornado
+5️⃣ Clique em Authorize 🔓
+6️⃣ Cole o token no formato:
+
+nginx
+Copiar código
+Bearer SEU_ACCESS_TOKEN
+7️⃣ Agora teste rotas protegidas como:
+
+GET /users/me
+
+✔️ O Swagger enviará o token automaticamente nas requisições protegidas
 
 🧩 Estrutura Importante
+pgsql
+Copiar código
 src/
 ├── config/
-│   └── jwt.ts
+│   ├── jwt.ts
+│   └── swagger.ts
 ├── features/
 │   ├── auth/
 │   │   ├── controllers/
@@ -145,50 +170,33 @@ src/
 │       ├── services/
 │       └── repositories/
 ├── shared/
-│   └── middlewares/
+│   └── middleware/
 │       └── EnsureAuthMiddleware.ts
 ├── server.ts
-
-🔑 Autenticação JWT
-🔐 Access Token
-
-Curta duração (15 minutos)
-
-Usado para acessar rotas protegidas
-
-🔁 Refresh Token
-
-Longa duração (30 dias)
-
-Preparado para renovação automática do access token
-
 📡 Rotas da API
 🧑 Criar usuário
 POST /users
 
-
-Body
-
+json
+Copiar código
 {
   "name": "Luca",
   "email": "luca@email.com",
   "password": "12345678"
 }
-
 🔓 Login
 POST /auth/login
 
-
-Body
-
+json
+Copiar código
 {
   "email": "luca@email.com",
   "password": "12345678"
 }
+Resposta:
 
-
-Resposta
-
+json
+Copiar código
 {
   "accessToken": "jwt_token_aqui",
   "user": {
@@ -197,36 +205,23 @@ Resposta
     "email": "luca@email.com"
   }
 }
-
 🔒 Rota protegida – Perfil do usuário
 GET /users/me
 
+Header:
 
-Headers
-
+makefile
+Copiar código
 Authorization: Bearer SEU_ACCESS_TOKEN
+Resposta:
 
-
-Resposta
-
+json
+Copiar código
 {
   "userId": "uuid",
   "email": "luca@email.com"
 }
-
-🛡️ Proteção de Rotas
-
-As rotas protegidas utilizam o decorator:
-
-@EnsureAuth()
-
-
-E o usuário autenticado é acessado via:
-
-@CurrentUser()
-
 🚫 Controle de Tentativas de Login
-
 Cada erro incrementa loginAttempts
 
 Após atingir o limite, o usuário é bloqueado temporariamente
@@ -235,36 +230,45 @@ Login correto reseta as tentativas
 
 Campos no banco:
 
+prisma
+Copiar código
 loginAttempts Int      @default(0)
 lockedUntil   DateTime?
-
-🧪 Testes com Postman
-
-1️⃣ Criar usuário
-2️⃣ Fazer login
-3️⃣ Copiar accessToken
-4️⃣ Usar Bearer Token nas rotas protegidas
-5️⃣ Testar bloqueio errando a senha repetidamente
-
 🚧 Próximos Upgrades Planejados
-
 🔁 Persistir Refresh Token no banco
 📧 Enviar email automático ao bloquear usuário
 🧾 Log de tentativas de login
 🧑‍💻 Logout global (revogação de tokens)
 
 👨‍💻 Padrão adotado
+Este projeto utiliza routing-controllers, permitindo:
 
-Este projeto não usa Express puro, e sim:
+Uso de decorators
 
-routing-controllers, que interpreta decorators corretamente
-(diferente do Express tradicional)
+Código limpo e organizado
 
-Isso permite um código mais limpo, escalável e profissional.
+Escalabilidade
+
+Integração direta com Swagger
 
 ✅ Status Atual
-
 ✔ Autenticação funcional
 ✔ Rotas protegidas funcionando
+✔ Swagger ativo
 ✔ Tokens válidos
-✔ Sistema pronto para evoluir
+✔ Sistema pronto para evoluir 🚀
+
+yaml
+Copiar código
+
+---
+
+# 2️⃣ COMO TESTAR O SWAGGER (RESUMO RÁPIDO)
+
+```text
+1. npm run dev
+2. http://localhost:3000/docs
+3. POST /auth/login
+4. Copiar accessToken
+5. Authorize → Bearer TOKEN
+6. Testar GET /users/me
