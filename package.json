@@ -5,9 +5,9 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js",
+      "dev": "tsx watch src/index.ts",
+      "build": "tsc",
+    "start": "node dist/index.js",
     "db:migrate": "dotenv prisma migrate dev",
     "db:studio": "dotenv prisma studio"
   },
