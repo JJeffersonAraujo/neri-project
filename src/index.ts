@@ -1,34 +1,8 @@
-import express, { Request, Response } from 'express';
-import { userRoutes } from './features/user/routes/userRoutes';
-import { authRoutes } from './features/auth/routes/authRoutes';
-import { ensureAuth } from './features/auth/middleware/ensureAuth';
+import { app } from './app.js'
 
-
-const app = express();
-app.use(express.json());
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World');
-});
-
-/* 🔒 ROTA DE TESTE PROTEGIDA */
-app.get('/protected', ensureAuth, (req: Request, res: Response) => {
-  return res.json({
-    message: 'Access granted',
-    userId: req.user?.id,
-  });
-});
-
-app.use('/users', userRoutes);
-app.use('/auth', authRoutes);
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
-
-
-app.listen(app, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}/docs`);
-});
+  console.log(`Servidor rodando em http://localhost:${PORT}`)
+  console.log(`Swagger em http://localhost:${PORT}/docs`)
+})

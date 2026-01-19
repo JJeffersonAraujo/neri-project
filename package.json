@@ -5,8 +5,8 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-      "dev": "tsx watch src/index.ts",
-      "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
     "start": "node dist/index.js",
     "db:migrate": "dotenv prisma migrate dev",
     "db:studio": "dotenv prisma studio"
@@ -39,6 +39,8 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.10.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "dotenv-cli": "^11.0.0",
     "prisma": "^6.19.2",
     "tsx": "^4.21.0",

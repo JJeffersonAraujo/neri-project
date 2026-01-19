@@ -1,23 +1,36 @@
 import { Router } from 'express'
-import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware'
+import { UserController } from '../../user/controllers/userControllers.js'
 
-const router = Router()
+const userRoutes = Router()
+const controller = new UserController()
 
-// Crie as sub-rotas
-const adminRoutes = Router()
-const profissionalRoutes = Router()
-const gestorRoutes = Router()
-const clienteRoutes = Router()
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Criar um novo usuário
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *                 enum: [ADMIN, GESTOR, PROFISSIONAL, USER]
+ *     responses:
+ *       201:
+ *         description: Usuário criado com sucesso
+ */
+userRoutes.post('/users', controller.create)
 
-// Adicione seus endpoints nas sub-rotas
-// Exemplo:
-// adminRoutes.post('/', AdminController.create)
-// adminRoutes.get('/', AdminController.getAll)
-
-router.use('/admins', authMiddleware, adminRoutes)
-router.use('/profissionais', authMiddleware, profissionalRoutes)
-router.use('/gestores', authMiddleware, gestorRoutes)
-router.use('/clientes', clienteRoutes) 
-export { router as userRoutes }
-
-
+export { userRoutes }

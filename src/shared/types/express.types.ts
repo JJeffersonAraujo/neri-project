@@ -1,14 +1,14 @@
-import { JwtPayload } from 'jsonwebtoken'
 import swaggerJsdoc from 'swagger-jsdoc'
 
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload
+      user?: {
+        id: string
+      }
     }
   }
 }
-
 
 export const swaggerSpec = swaggerJsdoc({
   definition: {
@@ -33,6 +33,5 @@ export const swaggerSpec = swaggerJsdoc({
     }
   },
 
-  // ⚠️ ISSO É CRÍTICO
   apis: ['src/features/**/routes/*.ts']
 })
