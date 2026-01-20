@@ -1,14 +1,33 @@
-import { Router } from 'express'
-import { AdminController, profissionalSaudeController, gestorController, clienteController } from '../../user/controllers/userControllers'
-import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware'
+import { z } from 'zod'
 
-const router = Router()
-const controller = new AdminController()
-const controllerProfissional = new profissionalSaudeController()
-const controllerGestor = new gestorController()
-const controllerCliente = new clienteController()
+// Schema de criação de usuário com validações
+export const CreateUserSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: 'Nome deve ter no mínimo 3 caracteres' })
+    .max(100, { message: 'Nome deve ter no máximo 100 caracteres' }),
+  email: z
+    .string()
+    .email({ message: 'Email inválido' })
+    .toLowerCase(),
+  password: z
+    .string()
+    .min(8, { message: 'Senha deve ter no mínimo 8 caracteres' })
+    .regex(/[A-Z]/, { message: 'Senha deve conter pelo menos uma letra maiúscula' })
+    .regex(/[0-9]/, { message: 'Senha deve conter pelo menos um número' }),
+  role: z.enum(['admin', 'profissional_saude', 'gestor', 'cliente'])
+})
 
-router.put('/admin/:id', authMiddleware, controller.create)
-router.put('/profissional/:id', authMiddleware, controllerProfissional.create)
-router.put('/gestor/:id', authMiddleware, controllerGestor.create)
-router.put('/cliente/:id', authMiddleware, controllerCliente.create)
+// Schema de atualização (campos opcionais)
+export const UpdateUserSchema = CreateUserSchema.partial()
+
+// Schema de login
+export const LoginUserSchema = z.object({
+  email: z.string().email({ message: 'Email inválido' }),
+  password: z.string().min(1, { message: 'Senha é obrigatória' })
+})
+
+// Inferindo tipos do Zod (melhor que interfaces manuais)
+export type CreateUserInput = z.infer<typeof CreateUserSchema>
+export type UpdateUserInput = z.infer<typeof UpdateUserSchema>
+export type LoginUserInput = z.infer<typeof LoginUserSchema>

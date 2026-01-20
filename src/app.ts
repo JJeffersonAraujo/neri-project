@@ -9,8 +9,7 @@ app.use(express.json())
 
 // ROTAS DA API
 app.use('/api', userRoutes)
-
-// SWAGGER (TEM QUE SER DEPOIS DO EXPRESS.JSON)
+// ROTA DA DOCUMENTAÇÃO
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 export { app }
