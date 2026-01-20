@@ -1,44 +1,42 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-
-import { LoginDTO } from '../dtos/loginDTO';
-import { UserRepository } from '../../user/repositories/userRepository';
-import { jwtConfig } from '../../../config/jwt';
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import { prisma } from '../../../shared/database/prismaClient.js'
+import { LoginDTO } from '../dtos/loginDTO.js'
+import { jwtConfig } from '../../../shared/utils/jwt.util.js'
 
 export class AuthService {
-  private userRepository = new UserRepository();
-
   async login(data: LoginDTO) {
-    const user = await this.userRepository.findByEmail(data.email);
+    const user = await prisma.usuario.findUnique({
+      where: { email: data.email },
+    })
 
     if (!user) {
-      throw new Error('Invalid email or password');
+      throw new Error('Email ou senha inválidos')
     }
 
     const passwordMatch = await bcrypt.compare(
       data.password,
-      user.password
-    );
+      user.senhaHash
+    )
 
     if (!passwordMatch) {
-      throw new Error('Invalid email or password');
+      throw new Error('Email ou senha inválidos')
     }
 
     const token = jwt.sign(
-      { userId: user.id },
-      jwtConfig.secret as jwt.Secret,
-      {
-        expiresIn: jwtConfig.expiresIn as jwt.SignOptions['expiresIn'],
-      }
-    );
+      { id: user.id },
+      jwtConfig.secret,
+      { expiresIn: jwtConfig.expiresIn }
+    )
 
     return {
       token,
       user: {
         id: user.id,
-        name: user.name,
+        nome: user.nome,
         email: user.email,
+        role: user.role,
       },
-    };
+    }
   }
 }

@@ -21,7 +21,7 @@ export class UserService {
 
     const senhaHash = await bcrypt.hash(data.senha, 10)
 
-    const user = await prisma.usuario.create({
+    return prisma.usuario.create({
       data: {
         nome: data.nome,
         email: data.email,
@@ -36,8 +36,6 @@ export class UserService {
         createdAt: true,
       },
     })
-
-    return user
   }
 
   async findAll() {
@@ -65,31 +63,19 @@ export class UserService {
       },
     })
 
-    if (!user) {
-      throw new Error('Usuário não encontrado')
-    }
-
+    if (!user) throw new Error('Usuário não encontrado')
     return user
   }
 
   async update(id: number, data: Partial<CreateUserDTO>) {
-    const user = await prisma.usuario.findUnique({
-      where: { id },
-    })
-
-    if (!user || user.deletedAt) {
-      throw new Error('Usuário não encontrado')
-    }
+    const user = await prisma.usuario.findUnique({ where: { id } })
+    if (!user || user.deletedAt) throw new Error('Usuário não encontrado')
 
     const updateData: any = {}
-
     if (data.nome) updateData.nome = data.nome
     if (data.email) updateData.email = data.email
     if (data.role) updateData.role = data.role
-
-    if (data.senha) {
-      updateData.senhaHash = await bcrypt.hash(data.senha, 10)
-    }
+    if (data.senha) updateData.senhaHash = await bcrypt.hash(data.senha, 10)
 
     return prisma.usuario.update({
       where: { id },
@@ -107,9 +93,7 @@ export class UserService {
   async delete(id: number) {
     await prisma.usuario.update({
       where: { id },
-      data: {
-        deletedAt: new Date(),
-      },
+      data: { deletedAt: new Date() },
     })
   }
 }

@@ -1,11 +1,10 @@
+// src/shared/middleware/jwtMiddleware.ts
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import { jwtConfig } from '../../shared/utils/jwt.util.js'
-
-import '../types/express.types.js'
+import { jwtConfig } from '../utils/jwt.util.js'
 
 interface TokenPayload {
-  id: string
+  id: number
 }
 
 export function authMiddleware(
@@ -25,7 +24,7 @@ export function authMiddleware(
     const decoded = jwt.verify(token, jwtConfig.secret) as TokenPayload
 
     req.user = {
-      id: decoded.id
+      id: String(decoded.id)
     }
 
     return next()

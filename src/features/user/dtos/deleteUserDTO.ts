@@ -1,14 +1,11 @@
 import { Router } from 'express'
-import { AdminController, profissionalSaudeController, gestorController, clienteController } from '../../user/controllers/userControllers'
-import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware'
+import { UserController } from '../../user/controllers/userControllers.js'
+import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
 
 const router = Router()
-const controller = new AdminController()
-const controllerProfissional = new profissionalSaudeController()
-const controllerGestor = new gestorController()
-const controllerCliente = new clienteController()
+const controller = new UserController()
 
-router.delete('/admin/:id', authMiddleware, controller.delete)
-router.delete('/profissional/:id', authMiddleware, controllerProfissional.delete)
-router.delete('/gestor/:id', authMiddleware, controllerGestor.delete)
-router.delete('/cliente/:id', authMiddleware, controllerCliente.delete)
+// Deletar usuário por ID
+router.delete('/:id', authMiddleware, controller.delete)
+
+export { router as deleteUserRoutes }

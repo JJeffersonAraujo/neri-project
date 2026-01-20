@@ -1,4 +1,4 @@
-import { User } from '../types/user.types';
+import { User } from '../../user/types/user.types.js';
 
 export class UserRepository {
   private static users: User[] = [];
