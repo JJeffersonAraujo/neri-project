@@ -9,7 +9,7 @@ const controller = new AdminController()
 
 router.post(
   '/',
-  validateDto(createAdminSchema), // 👈 ZOD AQUI
+  validateDto(createAdminSchema),
   controller.create
 )
 
