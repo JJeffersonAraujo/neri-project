@@ -14,4 +14,3 @@ router.use('/gestores', authMiddleware, gestorRoutes)
 router.use('/clientes', authMiddleware, clienteRoutes)
 export { router as userRoutes }
 
-
