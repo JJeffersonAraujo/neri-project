@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { clienteService } from '../services/cliente.services'
 import { CreateClienteDTO } from '../dtos/cliente.dtos'
 
-export class AdminController {
+export class ClienteController {
   async create(
     req: Request<{}, {}, CreateClienteDTO>,
     res: Response

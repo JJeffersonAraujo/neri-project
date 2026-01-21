@@ -18,3 +18,4 @@ export const swaggerConfig = swaggerJsdoc({
   },
   apis: ['./src/features/**/routes/*.ts']
 })
+
