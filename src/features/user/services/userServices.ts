@@ -6,7 +6,7 @@ interface CreateUserDTO {
   nome: string
   email: string
   senha: string
-  role: Role
+  role?: Role
 }
 
 export class UserService {
@@ -26,7 +26,7 @@ export class UserService {
         nome: data.nome,
         email: data.email,
         senhaHash,
-        role: data.role,
+        role: data.role ?? Role.USER,
       },
       select: {
         id: true,
@@ -72,10 +72,13 @@ export class UserService {
     if (!user || user.deletedAt) throw new Error('Usuário não encontrado')
 
     const updateData: any = {}
+
     if (data.nome) updateData.nome = data.nome
     if (data.email) updateData.email = data.email
     if (data.role) updateData.role = data.role
-    if (data.senha) updateData.senhaHash = await bcrypt.hash(data.senha, 10)
+    if (data.senha) {
+      updateData.senhaHash = await bcrypt.hash(data.senha, 10)
+    }
 
     return prisma.usuario.update({
       where: { id },

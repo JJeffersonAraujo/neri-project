@@ -1,23 +1,22 @@
-// src/features/user/routes/userRoutes.ts
 import { Router } from 'express'
-import { UserController } from '../../user/controllers/userControllers.js'
-import { authMiddleware } from '../../../shared/middleware/jwtMiddleware.js'
+import { UserController } from '../controllers/userControllers.js'
+import { authMiddleware } from '../../../shared/middleware/authMiddlewares.js'
 
-const userRoutes = Router()
+const router = Router()
 const controller = new UserController()
 
 /**
  * @swagger
  * tags:
  *   name: Users
- *   description: Rotas de gerenciamento de usuários
+ *   description: Usuários
  */
 
 /**
  * @swagger
  * /users:
  *   post:
- *     summary: Criar um novo usuário
+ *     summary: Criar usuário
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -25,27 +24,37 @@ const controller = new UserController()
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - nome
+ *               - email
+ *               - senha
+ *               - role
  *             properties:
  *               nome:
  *                 type: string
+ *                 example: Jefferson
  *               email:
  *                 type: string
+ *                 example: admin@email.com
  *               senha:
  *                 type: string
+ *                 example: 123456
  *               role:
  *                 type: string
  *                 enum: [ADMIN, GESTOR, PROFISSIONAL, USER]
  *     responses:
  *       201:
  *         description: Usuário criado com sucesso
+ *       400:
+ *         description: Dados inválidos
  */
-userRoutes.post('/users', (req, res) => controller.create(req, res))
+router.post('/users', controller.create.bind(controller))
 
 /**
  * @swagger
  * /users:
  *   get:
- *     summary: Listar todos os usuários
+ *     summary: Listar usuários
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -53,7 +62,7 @@ userRoutes.post('/users', (req, res) => controller.create(req, res))
  *       200:
  *         description: Lista de usuários
  */
-userRoutes.get('/users', authMiddleware, (req, res) => controller.findAll(req, res))
+router.get('/users', authMiddleware, controller.findAll.bind(controller))
 
 /**
  * @swagger
@@ -75,13 +84,13 @@ userRoutes.get('/users', authMiddleware, (req, res) => controller.findAll(req, r
  *       404:
  *         description: Usuário não encontrado
  */
-userRoutes.get('/users/:id', authMiddleware, (req, res) => controller.findById(req, res))
+router.get('/users/:id', authMiddleware, controller.findById.bind(controller))
 
 /**
  * @swagger
  * /users/{id}:
  *   put:
- *     summary: Atualizar um usuário
+ *     summary: Atualizar usuário
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -92,7 +101,6 @@ userRoutes.get('/users/:id', authMiddleware, (req, res) => controller.findById(r
  *         schema:
  *           type: integer
  *     requestBody:
- *       required: true
  *       content:
  *         application/json:
  *           schema:
@@ -111,13 +119,13 @@ userRoutes.get('/users/:id', authMiddleware, (req, res) => controller.findById(r
  *       200:
  *         description: Usuário atualizado
  */
-userRoutes.put('/users/:id', authMiddleware, (req, res) => controller.update(req, res))
+router.put('/users/:id', authMiddleware, controller.update.bind(controller))
 
 /**
  * @swagger
  * /users/{id}:
  *   delete:
- *     summary: Deletar um usuário
+ *     summary: Remover usuário (soft delete)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -129,8 +137,8 @@ userRoutes.put('/users/:id', authMiddleware, (req, res) => controller.update(req
  *           type: integer
  *     responses:
  *       204:
- *         description: Usuário deletado
+ *         description: Usuário removido
  */
-userRoutes.delete('/users/:id', authMiddleware, (req, res) => controller.delete(req, res))
+router.delete('/users/:id', authMiddleware, controller.delete.bind(controller))
 
-export { userRoutes }
+export { router as userRoutes }

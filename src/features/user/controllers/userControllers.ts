@@ -9,11 +9,17 @@ export class UserController {
     try {
       const { nome, email, senha, role } = req.body
 
-      if (!Object.values(Role).includes(role)) {
+      if (role && !Object.values(Role).includes(role)) {
         return res.status(400).json({ message: 'Role inválida' })
       }
 
-      const user = await this.userService.create({ nome, email, senha, role })
+      const user = await this.userService.create({
+        nome,
+        email,
+        senha,
+        role,
+      })
+
       return res.status(201).json(user)
     } catch (error: any) {
       return res.status(400).json({ message: error.message })
@@ -31,7 +37,10 @@ export class UserController {
   }
 
   async update(req: Request, res: Response) {
-    const user = await this.userService.update(Number(req.params.id), req.body)
+    const user = await this.userService.update(
+      Number(req.params.id),
+      req.body
+    )
     return res.json(user)
   }
 

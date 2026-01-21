@@ -10,7 +10,7 @@ export class AuthController {
 
       const result = await this.authService.login({
         email,
-        password: senha
+        password: senha,
       })
 
       return res.json(result)

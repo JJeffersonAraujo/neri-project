@@ -4,6 +4,6 @@ export const jwtConfig: {
   secret: Secret
   expiresIn: SignOptions['expiresIn']
 } = {
-  secret: 'neri-secret-key',
-  expiresIn: '1d',
+  secret: process.env.JWT_SECRET as Secret,
+  expiresIn: process.env.JWT_EXPIRES_IN as SignOptions['expiresIn'],
 }

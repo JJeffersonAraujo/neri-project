@@ -4,18 +4,14 @@ export const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Saúde',
+      title: 'Neri Project API',
       version: '1.0.0',
     },
-
-    // 🔴 ESSENCIAL PARA NÃO DAR 404
     servers: [
       {
         url: 'http://localhost:3000/api',
-        description: 'Servidor local',
       },
     ],
-
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -25,13 +21,11 @@ export const swaggerSpec = swaggerJsdoc({
         },
       },
     },
-
     security: [
       {
         bearerAuth: [],
       },
     ],
   },
-
-  apis: ['./src/features/**/*.ts'],
+  apis: ['./src/features/**/routes/*.ts'],
 })

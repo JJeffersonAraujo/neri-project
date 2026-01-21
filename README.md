@@ -1,4 +1,3 @@
-
 # Backend API – Setup Inicial
 
 Projeto backend desenvolvido para fins corporativos, com foco em padronização de ambiente,
@@ -20,6 +19,12 @@ Banco de Dados:
 - PostgreSQL 15+
 - Prisma ORM 6.19.2
 - Docker + Docker Compose (ambiente local)
+- Banco PostgreSQL online (ambiente remoto)
+
+Autenticação e Documentação:
+- JWT (jsonwebtoken)
+- Swagger (swagger-jsdoc + swagger-ui-express)
+- Zod (validação de dados)
 
 ======================================================================
 ### ARQUITETURA DO PROJETO
@@ -64,110 +69,43 @@ npm install
 --------------------------------------------------
 3) Configurar variáveis de ambiente
 
-Crie um arquivo .env na raiz do projeto com o seguinte conteúdo:
+Crie um arquivo .env na raiz do projeto:
 
-DATABASE_URL="postgresql://developer:dev_password_123@localhost:5432/project_db"
+DATABASE_URL="postgresql://user:password@host:5432/database"
+JWT_SECRET="chave_secreta_jwt"
+JWT_EXPIRES_IN="1d"
+
+Observação:
+- O banco pode ser local (Docker) ou remoto (online)
+- A API continuará local enquanto não for feito deploy
 
 --------------------------------------------------
-4) Subir o banco de dados (Docker)
+4) Subir banco local (opcional)
 
 docker compose up -d
 
-Serviços iniciados:
-- PostgreSQL
-- pgAdmin
-
-Acessos:
-- PostgreSQL: localhost:5432
-- pgAdmin: http://localhost:5050
-
-Credenciais do banco:
-Usuário: developer
-Senha: dev_password_123
-Database: project_db
-
 --------------------------------------------------
-5) Validar schema do Prisma
+5) Prisma
 
 npx prisma validate
-
---------------------------------------------------
-6) Criar/aplicar migrations (se necessário)
-
-npx prisma migrate dev --name init_database
-
---------------------------------------------------
-7) Gerar cliente Prisma
-
+npx prisma migrate dev
 npx prisma generate
-
---------------------------------------------------
-8) (Opcional) Abrir Prisma Studio
-
-npx prisma studio
 
 ======================================================================
 ### EXECUÇÃO DA API
 ======================================================================
 
-Para executar a API em ambiente de desenvolvimento:
+Ambiente de desenvolvimento:
 
 npm run dev
-
-O servidor será iniciado utilizando tsx e ficará observando alterações.
 
 Aplicação disponível em:
 http://localhost:3000
 
-======================================================================
-### TESTANDO OS ENDPOINTS
-======================================================================
+Health check:
+http://localhost:3000/health
 
-Ferramenta recomendada:
-- Postman ou Insomnia
+Swagger:
+http://localhost:3000/docs
 
-Fluxo básico para testes:
-
-1) Subir os containers do banco
-2) Executar a API (npm run dev)
-3) Garantir que o banco esteja acessível
-4) Executar requisições HTTP para os endpoints disponíveis
-
-Exemplo de base URL:
-http://localhost:3000/user
-
-Observações importantes:
-- Certifique-se de que o Docker esteja rodando
-- A API depende do banco ativo para funcionar corretamente
-- Erros de conexão geralmente indicam banco parado
-
-======================================================================
-### TROUBLESHOOTING
-======================================================================
-
-Erro: Can't reach database server at localhost:5432
-Solução:
-- Verifique se o docker compose está rodando
-- Confirme se o container postgres está ativo
-- Verifique o DATABASE_URL no .env
-
-Erro: Cannot find module src/server.ts
-Solução:
-- O entrypoint da aplicação é src/index.ts
-- Verifique o script "dev" no package.json
-
-======================================================================
-### PADRÕES ADOTADOS
-======================================================================
-
-- Commits semânticos
-- Versionamento controlado por migrations
-- Separação clara de responsabilidades
-- Código preparado para testes e CI/CD
-
-======================================================================
-### STATUS DO PROJETO
-======================================================================
-
-Projeto em fase inicial de desenvolvimento, com estrutura preparada
-para crescimento gradual e adição de novas features.
+==================================================
