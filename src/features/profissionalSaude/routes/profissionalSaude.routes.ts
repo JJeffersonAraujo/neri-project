@@ -18,4 +18,4 @@ router.get('/:id', authMiddleware, controller.findById)
 router.put('/:id', authMiddleware, controller.update)
 router.delete('/:id', authMiddleware, controller.delete)
 
-export { router as gestorRoutes }
+export { router as profissionalSaudeRoutes }

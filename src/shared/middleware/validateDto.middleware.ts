@@ -3,16 +3,16 @@ import { ZodSchema } from 'zod'
 
 export function validateDto(schema: ZodSchema) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req.body)
+    const parsed = schema.safeParse(req.body)
 
-    if (!result.success) {
+    if (!parsed.success) {
       return res.status(400).json({
         message: 'Erro de validação',
-        errors: result.error.format()
+        errors: parsed.error.format()
       })
     }
 
-    req.body = result.data
+    req.body = parsed.data
     next()
   }
 }
