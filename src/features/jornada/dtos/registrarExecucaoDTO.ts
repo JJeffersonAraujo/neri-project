@@ -1,8 +1,7 @@
-// src/features/jornada/dto/registrarExecucaoDTO.ts
 import { z } from 'zod'
 
 export const registrarExecucaoDTO = z.object({
-  escalaId: z.number(),
+  escalaId: z.coerce.number(), // 👈 CORREÇÃO IMPORTANTE
   inicioExecutado: z.string().datetime(),
   fimExecutado: z.string().datetime()
 })

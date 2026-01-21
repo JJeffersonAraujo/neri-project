@@ -1,19 +1,22 @@
-// src/features/jornada/services/jornadaService.ts
 import { prisma } from '../../../shared/database/prismaClient.js'
 import { JornadaCalculoService } from './jornadaCalculoService.js'
-import { RegistrarExecucaoDTO } from '../../jornada/dtos/registrarExecucaoDTO.js'
+import { RegistrarExecucaoDTO } from '../dtos/registrarExecucaoDTO.js'
+import { LogExecution } from '../../../shared/decorators/LogExecution.js'
 
 export class JornadaService {
-  private calculoService: JornadaCalculoService
+  private readonly calculoService: JornadaCalculoService
 
   constructor() {
     this.calculoService = new JornadaCalculoService()
   }
 
   // Registrar execução da jornada
+  @LogExecution()
   async registrarExecucao(data: RegistrarExecucaoDTO) {
+    const escalaId = Number(data.escalaId)
+
     const escala = await prisma.escala.findUnique({
-      where: { id: data.escalaId }
+      where: { id: escalaId }
     })
 
     if (!escala) {
@@ -23,16 +26,16 @@ export class JornadaService {
     const inicioExecutado = new Date(data.inicioExecutado)
     const fimExecutado = new Date(data.fimExecutado)
 
-    // Salvar execução
+    // Salva jornada executada
     const jornadaExecutada = await prisma.jornadaExecutada.create({
       data: {
-        escalaId: data.escalaId,
+        escalaId,
         inicioExecutado,
         fimExecutado
       }
     })
 
-    // Calcular jornada
+    // Calcula jornada (NOMES CORRETOS DO SCHEMA)
     const calculo = this.calculoService.calcular({
       inicioPlanejado: escala.dataInicio,
       fimPlanejado: escala.dataFim,
@@ -40,10 +43,10 @@ export class JornadaService {
       fimExecutado
     })
 
-    // Salvar jornada calculada
+    // Salva jornada calculada
     const jornadaCalculada = await prisma.jornadaCalculada.create({
       data: {
-        escalaId: data.escalaId,
+        escalaId,
         minutosTrabalhados: calculo.minutosTrabalhados,
         minutosAtraso: calculo.minutosAtraso,
         minutosExtras: calculo.minutosExtras,
@@ -54,48 +57,51 @@ export class JornadaService {
     return { jornadaExecutada, jornadaCalculada }
   }
 
-  // Listar todas as jornadas executadas
+  // Listar todas
+  @LogExecution()
   async listarTodas() {
     return prisma.jornadaExecutada.findMany({
-      include: {
-        escala: true
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
+      include: { escala: true },
+      orderBy: { createdAt: 'desc' }
     })
   }
 
-  // Buscar jornada por ID
+  // Buscar por ID
+  @LogExecution()
   async buscarPorId(id: number) {
     return prisma.jornadaExecutada.findUnique({
       where: { id },
-      include: {
-        escala: true
-      }
+      include: { escala: true }
     })
   }
 
-  // Atualizar uma execução de jornada
+  // Atualizar
+  @LogExecution()
   async atualizar(
     id: number,
     data: { inicioExecutado: Date; fimExecutado: Date }
   ) {
-    const jornada = await prisma.jornadaExecutada.findUnique({ where: { id } })
-    if (!jornada) throw new Error('Jornada não encontrada')
+    const jornada = await prisma.jornadaExecutada.findUnique({
+      where: { id }
+    })
+
+    if (!jornada) {
+      throw new Error('Jornada não encontrada')
+    }
 
     const escala = await prisma.escala.findUnique({
       where: { id: jornada.escalaId }
     })
-    if (!escala) throw new Error('Escala não encontrada')
 
-    // Atualiza execução
+    if (!escala) {
+      throw new Error('Escala não encontrada')
+    }
+
     const jornadaAtualizada = await prisma.jornadaExecutada.update({
       where: { id },
       data
     })
 
-    // Recalcula jornada
     const calculo = this.calculoService.calcular({
       inicioPlanejado: escala.dataInicio,
       fimPlanejado: escala.dataFim,
@@ -103,7 +109,6 @@ export class JornadaService {
       fimExecutado: data.fimExecutado
     })
 
-    // Atualiza jornada calculada
     await prisma.jornadaCalculada.updateMany({
       where: { escalaId: jornada.escalaId },
       data: {
@@ -117,13 +122,23 @@ export class JornadaService {
     return jornadaAtualizada
   }
 
-  // Deletar execução de jornada
-  async deletar(id: number) {
-    const jornada = await prisma.jornadaExecutada.findUnique({ where: { id } })
-    if (!jornada) throw new Error('Jornada não encontrada')
+  // Deletar
+  @LogExecution()
+  async deletar(id: number): Promise<void> {
+    const jornada = await prisma.jornadaExecutada.findUnique({
+      where: { id }
+    })
 
-    // Deleta execução e calculada
-    await prisma.jornadaCalculada.deleteMany({ where: { escalaId: jornada.escalaId } })
-    await prisma.jornadaExecutada.delete({ where: { id } })
+    if (!jornada) {
+      throw new Error('Jornada não encontrada')
+    }
+
+    await prisma.jornadaCalculada.deleteMany({
+      where: { escalaId: jornada.escalaId }
+    })
+
+    await prisma.jornadaExecutada.delete({
+      where: { id }
+    })
   }
 }
