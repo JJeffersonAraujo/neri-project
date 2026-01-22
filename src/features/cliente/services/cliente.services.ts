@@ -1,4 +1,4 @@
-import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/cliente.types'
+import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/cliente.types.js'
 
 export class clienteService {
   static async create(data: ICreateUserPayload): Promise<{ message: string; data: ICreateUserPayload }> {

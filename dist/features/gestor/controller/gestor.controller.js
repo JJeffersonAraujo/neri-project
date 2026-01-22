@@ -1,4 +1,4 @@
-import { gestorService } from '../services/gestor.services';
+import { gestorService } from '../services/gestor.services.js';
 export class gestorController {
     async create(req, res) {
         const gestor = await gestorService.create(req.body);

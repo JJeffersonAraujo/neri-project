@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { gestorService } from '../services/gestor.services'
-import { CreateGestorDTO } from '../dtos/gestor.dtos'
+import { gestorService } from '../services/gestor.services.js'
+import { CreateGestorDTO } from '../dtos/gestor.dtos.js'
 
 export class gestorController {
   async create(

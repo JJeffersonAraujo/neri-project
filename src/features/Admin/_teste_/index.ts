@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { adminRoutes } from '../routes/admin.routes'
+import { adminRoutes } from '../routes/admin.routes.js'
 
 const routes = Router()
 

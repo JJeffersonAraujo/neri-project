@@ -1,4 +1,4 @@
-import { clienteService } from '../services/cliente.services';
+import { clienteService } from '../services/cliente.services.js';
 export class ClienteController {
     async create(req, res) {
         const cliente = await clienteService.create(req.body);

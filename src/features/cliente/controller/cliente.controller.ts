@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { clienteService } from '../services/cliente.services'
-import { CreateClienteDTO } from '../dtos/cliente.dtos'
+import { clienteService } from '../services/cliente.services.js'
+import { CreateClienteDTO } from '../dtos/cliente.dtos.js'
 
 export class ClienteController {
   async create(

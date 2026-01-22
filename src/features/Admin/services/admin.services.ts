@@ -1,4 +1,4 @@
-import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/admin.types'
+import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/admin.types.js'
 
 export class AdminService {
   static async create(data: ICreateUserPayload): Promise<{ message: string; data: ICreateUserPayload }> {

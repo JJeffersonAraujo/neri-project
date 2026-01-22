@@ -1,4 +1,4 @@
-import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/gestor.types'
+import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/gestor.types.js'
 
 export class gestorService {
   static async create(data: ICreateUserPayload): Promise<{ message: string; data: ICreateUserPayload }> {

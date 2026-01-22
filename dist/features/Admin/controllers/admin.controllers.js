@@ -1,4 +1,4 @@
-import { AdminService } from '../services/admin.services';
+import { AdminService } from '../services/admin.services.js';
 export class AdminController {
     async create(req, res) {
         const admin = await AdminService.create(req.body);

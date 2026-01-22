@@ -1,4 +1,4 @@
-import { profissionalSaudeService } from '../services/profissionalSaude.services';
+import { profissionalSaudeService } from '../services/profissionalSaude.services.js';
 export class profissionalSaudeController {
     async create(req, res) {
         const profissionalSaude = await profissionalSaudeService.create(req.body);

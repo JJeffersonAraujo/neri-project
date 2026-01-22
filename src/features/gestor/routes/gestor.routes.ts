@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { gestorController } from '../controller/gestor.controller'
-import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware'
-import { validateDto } from '../../../shared/middleware/validateDto.middleware'
-import { createGestorSchema } from '../dtos/gestor.dtos'
+import { gestorController } from '../controller/gestor.controller.js'
+import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
+import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
+import { createGestorSchema } from '../dtos/gestor.dtos.js'
 
 const router = Router()
 const controller = new gestorController()

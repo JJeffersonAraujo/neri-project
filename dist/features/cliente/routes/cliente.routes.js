@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { ClienteController } from '../controller/cliente.controller';
-import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware';
-import { validateDto } from '../../../shared/middleware/validateDto.middleware';
-import { createClienteSchema } from '../dtos/cliente.dtos';
+import { ClienteController } from '../controller/cliente.controller.js';
+import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js';
+import { validateDto } from '../../../shared/middleware/validateDto.middleware.js';
+import { createClienteSchema } from '../dtos/cliente.dtos.js';
 const router = Router();
 const controller = new ClienteController();
 router.post('/', validateDto(createClienteSchema), controller.create);

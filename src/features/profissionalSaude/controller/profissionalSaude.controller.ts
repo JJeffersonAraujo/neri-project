@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { profissionalSaudeService } from '../services/profissionalSaude.services'
-import { CreateProfissionalSaudeDTO } from '../dtos/profissionalSaude.dtos'
+import { profissionalSaudeService } from '../services/profissionalSaude.services.js'
+import { CreateProfissionalSaudeDTO } from '../dtos/profissionalSaude.dtos.js'
 
 export class profissionalSaudeController {
   async create(

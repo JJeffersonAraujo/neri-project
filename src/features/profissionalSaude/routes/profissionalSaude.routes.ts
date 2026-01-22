@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { profissionalSaudeController } from '../controller/profissionalSaude.controller'
-import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware'
-import { validateDto } from '../../../shared/middleware/validateDto.middleware'
-import { createProfissionalSaudeSchema } from '../dtos/profissionalSaude.dtos'
+import { profissionalSaudeController } from '../controller/profissionalSaude.controller.js'
+import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
+import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
+import { createProfissionalSaudeSchema } from '../dtos/profissionalSaude.dtos.js'
 
 const router = Router()
 const controller = new profissionalSaudeController()

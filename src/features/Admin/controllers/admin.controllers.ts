@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { CreateAdminDTO } from '../dtos/admin.dtos'
-import { AdminService } from '../services/admin.services'
+import { CreateAdminDTO } from '../dtos/admin.dtos.js'
+import { AdminService } from '../services/admin.services.js'
 
 
 export class AdminController {
