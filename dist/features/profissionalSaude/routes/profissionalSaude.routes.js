@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { profissionalSaudeController } from '../controller/profissionalSaude.controller';
+import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware';
+import { validateDto } from '../../../shared/middleware/validateDto.middleware';
+import { createProfissionalSaudeSchema } from '../dtos/profissionalSaude.dtos';
+const router = Router();
+const controller = new profissionalSaudeController();
+router.post('/', validateDto(createProfissionalSaudeSchema), controller.create);
+router.get('/', authMiddleware, controller.findAll);
+router.get('/:id', authMiddleware, controller.findById);
+router.put('/:id', authMiddleware, controller.update);
+router.delete('/:id', authMiddleware, controller.delete);
+export { router as profissionalSaudeRoutes };

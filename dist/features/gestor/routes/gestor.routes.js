@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { gestorController } from '../controller/gestor.controller';
+import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware';
+import { validateDto } from '../../../shared/middleware/validateDto.middleware';
+import { createGestorSchema } from '../dtos/gestor.dtos';
+const router = Router();
+const controller = new gestorController();
+router.post('/', validateDto(createGestorSchema), controller.create);
+router.get('/', authMiddleware, controller.findAll);
+router.get('/:id', authMiddleware, controller.findById);
+router.put('/:id', authMiddleware, controller.update);
+router.delete('/:id', authMiddleware, controller.delete);
+export { router as gestorRoutes };

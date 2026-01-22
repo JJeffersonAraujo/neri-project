@@ -1,0 +1,145 @@
+// Generator para criar o Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Datasource
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/*
+ ENUMS
+*/
+enum Role {
+  ADMIN
+  GESTOR
+  PROFISSIONAL
+  USER
+}
+
+/*
+ MODELS
+*/
+model Usuario {
+  id         Int      @id @default(autoincrement())
+  nome       String
+  email      String   @unique
+  senhaHash  String   @map("senha_hash")
+  role       Role
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  deletedAt  DateTime?
+
+  profissional Profissional?
+  sessoes      AuthSessao[]
+
+  @@index([email])
+}
+
+model AuthSessao {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+}
+
+model TipoProfissional {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  profissionais Profissional[]
+  atividades    Atividade[]
+}
+
+model Profissional {
+  id                Int      @id @default(autoincrement())
+  usuarioId         Int      @unique
+  tipoProfissionalId Int
+  conselho           String
+  numeroRegistro     String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  deletedAt          DateTime?
+
+  usuario          Usuario          @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  tipoProfissional TipoProfissional @relation(fields: [tipoProfissionalId], references: [id])
+  plantoes         Plantao[]
+}
+
+model Escala {
+  id         Int      @id @default(autoincrement())
+  nome       String
+  dataInicio DateTime
+  dataFim    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  deletedAt  DateTime?
+
+  plantoes           Plantao[]
+  jornadaExecutadas  JornadaExecutada[]
+  jornadaCalculadas  JornadaCalculada[]
+}
+
+model Plantao {
+  id             Int      @id @default(autoincrement())
+  escalaId       Int
+  profissionalId Int
+  data           DateTime
+  horaInicio     DateTime
+  horaFim        DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+
+  escala       Escala       @relation(fields: [escalaId], references: [id], onDelete: Cascade)
+  profissional Profissional @relation(fields: [profissionalId], references: [id])
+  atividades   Atividade[]
+}
+
+model Atividade {
+  id                 Int      @id @default(autoincrement())
+  plantaoId          Int
+  tipoProfissionalId Int
+  descricao          String
+  horario            DateTime
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  deletedAt          DateTime?
+
+  plantao         Plantao         @relation(fields: [plantaoId], references: [id], onDelete: Cascade)
+  tipoProfissional TipoProfissional @relation(fields: [tipoProfissionalId], references: [id])
+}
+
+model JornadaExecutada {
+  id              Int      @id @default(autoincrement())
+  escalaId        Int
+  inicioExecutado DateTime
+  fimExecutado    DateTime
+  createdAt       DateTime @default(now())
+
+  escala Escala @relation(fields: [escalaId], references: [id], onDelete: Cascade)
+}
+
+model JornadaCalculada {
+  id                 Int      @id @default(autoincrement())
+  escalaId           Int
+  minutosTrabalhados Int
+  minutosAtraso      Int
+  minutosExtras      Int
+  minutosNoturnos    Int
+  createdAt          DateTime @default(now())
+
+  escala Escala @relation(fields: [escalaId], references: [id], onDelete: Cascade)
+}

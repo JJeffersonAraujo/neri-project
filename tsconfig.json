@@ -3,12 +3,23 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "rootDir": "./",
+    "typeRoots": ["./src/@types", "./node_modules/@types"],
+
+    "rootDir": "./src",
     "outDir": "./dist",
+    "ignoreDeprecations": "6.0",
+
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    },
+
+    "experimentalDecorators": true,
+
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["**/*.ts"]
+  "include": ["src"]
 }
