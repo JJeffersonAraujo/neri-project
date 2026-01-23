@@ -11,13 +11,6 @@ const controller = new profissionalSaudeController()
 
 /**
  * @swagger
- * tags:
- *   name: Prof-Saúde
- *   description: Rotas de gerenciamento de profissionais de saúde
- */
-
-/**
- * @swagger
  * /profsaude:
  *   post:
  *     summary: Criar Prof-Saúde

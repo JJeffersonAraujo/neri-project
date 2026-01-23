@@ -12,13 +12,6 @@ const controller = new AdminController()
 
 /**
  * @swagger
- * tags:
- *   name: Administrador
- *   description: Rotas de gerenciamento de administradores
- */
-
-/**
- * @swagger
  * /admins:
  *   post:
  *     summary: Criar administrador
@@ -83,6 +76,28 @@ router.post(
 router.get('/', devAuthMiddleware, controller.findAll)
 /*router.get('/', authMiddleware, controller.findAll)*/
 
+/**
+ * @swagger
+ * /api/admins/{id}:
+ *   get:
+ *     summary: Buscar administrador por ID
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Administrador encontrado
+ *       404:
+ *        description: Administrador não encontrado
+ */
+router.get('/:id', devAuthMiddleware, controller.findById)
 
 router.get('/:id', devAuthMiddleware, controller.findById)
 /*router.get('/:id', authMiddleware, controller.findById)*/

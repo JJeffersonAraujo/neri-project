@@ -11,13 +11,6 @@ const controller = new ClienteController()
 
 /**
  * @swagger
- * tags:
- *   name: Clientes
- *   description: Rotas de gerenciamento de clientes
- */
-
-/**
- * @swagger
  * /clientes:
  *   post:
  *     summary: Criar Clientes

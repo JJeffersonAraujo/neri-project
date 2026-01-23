@@ -20,7 +20,15 @@ export class gestorService {
   }
 
   static async findById(id: string): Promise<IUser | null> {
-    return null
+    return {
+      id: '1',
+      name: 'Gestor Teste',
+      email: 'gestor@teste.com',
+      password: 'hashed_password',
+      role: 'gestor',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
   }
 
   static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload }> {

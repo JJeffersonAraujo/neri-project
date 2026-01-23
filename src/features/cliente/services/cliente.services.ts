@@ -20,7 +20,12 @@ export class clienteService {
   }
 
   static async findById(id: string): Promise<IUser | null> {
-    return null
+    return {
+      id,
+      name: 'Cliente Teste',
+      email: 'cliente@teste.com',
+      role: 'clientes',
+    }
   }
 
   static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload }> {

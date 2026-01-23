@@ -20,7 +20,15 @@ export class profissionalSaudeService {
   }
 
   static async findById(id: string): Promise<IUser | null> {
-    return null
+    return {
+      id: '1',
+      name: 'Profissional de Saúde Teste',
+      email: 'profissional@teste.com',
+      password: 'hashed_password',
+      role: 'profissionalSaude',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
   }
 
   static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload }> {

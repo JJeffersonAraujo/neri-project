@@ -11,13 +11,6 @@ const controller = new gestorController()
 
 /**
  * @swagger
- * tags:
- *   name: Gestores
- *   description: Rotas de gerenciamento de gestores
- */
-
-/**
- * @swagger
  * /gestores:
  *   post:
  *     summary: Criar Gestores
