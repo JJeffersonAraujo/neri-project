@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { clienteService } from '../services/cliente.services.js'
 import { CreateClienteDTO } from '../dtos/cliente.dtos.js'
+import { clienteService } from '../services/cliente.services.js'
 
 export class ClienteController {
   async create(
@@ -30,9 +30,24 @@ export class ClienteController {
   //return prisma.user.findUnique({ where: { id } })
 }
 
-  async update(req: Request<{ id: string }>, res: Response) {
-    return res.json(await clienteService.update(req.params.id, req.body))
+async update(req: Request, res: Response) {
+  const { id } = req.params
+  const data = req.body
+
+  const cliente = await clienteService.update(id, data)
+
+  if (!cliente) {
+    return res.status(404).json({
+      message: 'Cliente não encontrado',
+    })
   }
+
+  return res.json({
+    message: 'Cliente atualizado',
+    data: cliente,
+  })
+
+}
 
   async delete(req: Request<{ id: string }>, res: Response) {
     await clienteService.delete(req.params.id)

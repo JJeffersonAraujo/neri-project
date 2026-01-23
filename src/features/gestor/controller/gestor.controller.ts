@@ -30,9 +30,24 @@ export class gestorController {
    //return prisma.user.findUnique({ where: { id } })
  }
 
-  async update(req: Request<{ id: string }>, res: Response) {
-    return res.json(await gestorService.update(req.params.id, req.body))
+async update(req: Request, res: Response) {
+  const { id } = req.params
+  const data = req.body
+
+  const gestor = await gestorService.update(id, data)
+
+  if (!gestor) {
+    return res.status(404).json({
+      message: 'Gestor não encontrado',
+    })
   }
+
+  return res.json({
+    message: 'Gestor atualizado',
+    data: gestor,
+  })
+
+}
 
   async delete(req: Request<{ id: string }>, res: Response) {
     await gestorService.delete(req.params.id)

@@ -99,7 +99,27 @@ router.get('/', devAuthMiddleware, controller.findAll)
 router.get('/:id', devAuthMiddleware, controller.findById)
 /*router.get('/:id', authMiddleware, controller.findById)*/
 
-
+/**
+ * @swagger
+ * /gestores/{id}:
+ *   put:
+ *     summary: Atualizar gestor
+ *     tags:
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Gestor atualizado
+ *       404:
+ *         description: Gestor não encontrado
+ */
 router.put('/:id', devAuthMiddleware, controller.update)
 /*router.put('/:id', authMiddleware, controller.update)*/
 

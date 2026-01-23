@@ -31,8 +31,20 @@ export class profissionalSaudeService {
   }
 }
 
-  static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload }> {
-    return { id, data }
+  static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload } | null> {
+    // simulação de banco
+    if (id !== '1') {
+      return null
+    }
+
+    return {
+      id: '1',
+      data: {
+        name: data.name ?? 'Profissional de Saúde Teste',
+        email: data.email ?? 'profissional@teste.com',
+        role: data.role ?? 'profissionalSaude',
+      },
+    }
   }
 
   static async delete(id: string): Promise<void> {

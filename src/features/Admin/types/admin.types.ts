@@ -8,7 +8,7 @@ export interface IUpdateUserPayload {
   name?: string
   email?: string
   password?: string
-  role: 'admin'
+  role: string
 }
 
 export interface IUser {

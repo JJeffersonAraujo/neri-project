@@ -32,9 +32,21 @@ static async findById(id: string): Promise<IUser | null> {
 }
 
 
-  static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload }> {
-    return { id, data }
-  }
+   static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload } | null> {
+     // simulação de banco
+     if (id !== '1') {
+       return null
+     }
+ 
+     return {
+       id: '1',
+       data: {
+         name: data.name ?? 'Admin Teste',
+         email: data.email ?? 'admin@teste.com',
+         role: data.role ?? 'admin',
+       },
+     }
+   }
 
   static async delete(id: string): Promise<void> {
     return

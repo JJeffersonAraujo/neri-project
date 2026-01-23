@@ -32,9 +32,24 @@ export class AdminController {
 }
 
 
-  async update(req: Request<{ id: string }>, res: Response) {
-    return res.json(await AdminService.update(req.params.id, req.body))
+async update(req: Request, res: Response) {
+  const { id } = req.params
+  const data = req.body
+
+  const admin = await AdminService.update(id, data)
+
+  if (!admin) {
+    return res.status(404).json({
+      message: 'Admin não encontrado',
+    })
   }
+
+  return res.json({
+    message: 'Admin atualizado',
+    data: admin,
+  })
+
+}
 
   async delete(req: Request<{ id: string }>, res: Response) {
     await AdminService.delete(req.params.id)

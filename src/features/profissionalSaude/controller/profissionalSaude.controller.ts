@@ -30,8 +30,23 @@ export class profissionalSaudeController {
    //return prisma.user.findUnique({ where: { id } })
  }
 
-  async update(req: Request<{ id: string }>, res: Response) {
-    return res.json(await profissionalSaudeService.update(req.params.id, req.body))
+  async update(req: Request, res: Response) {
+    const { id } = req.params
+    const data = req.body
+  
+    const profissionalSaude = await profissionalSaudeService.update(id, data)
+
+    if (!profissionalSaude) {
+      return res.status(404).json({
+        message: 'Cliente não encontrado',
+      })
+    }
+  
+    return res.json({
+      message: 'Profissional de saúde atualizado',
+      data: profissionalSaude,
+    })
+  
   }
 
   async delete(req: Request<{ id: string }>, res: Response) {
