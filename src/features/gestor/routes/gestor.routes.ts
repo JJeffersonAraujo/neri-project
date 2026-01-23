@@ -7,6 +7,44 @@ import { createGestorSchema } from '../dtos/gestor.dtos.js'
 const router = Router()
 const controller = new gestorController()
 
+/**
+ * @openapi
+ * /gestores:
+ *   post:
+ *     summary: Criar Gestores
+ *     tags:
+ *       - Gestores
+ *   
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 minLength: 3
+ *                 example: Maria Silva
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: cliente@email.com
+ *               password:
+ *                 type: string
+ *                 minLength: 6
+ *                 example: 123456
+ *     responses:
+ *       201:
+ *         description: Gestor criado com sucesso
+ *       400:
+ *         description: Erro de validação
+ */
+
 router.post(
   '/',
   validateDto(createGestorSchema),

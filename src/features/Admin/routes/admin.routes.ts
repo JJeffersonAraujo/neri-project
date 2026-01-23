@@ -14,7 +14,7 @@ const controller = new AdminController()
  *     summary: Criar administrador
  *     tags:
  *       - Administrador
- *       
+ *   
  *     requestBody:
  *       required: true
  *       content:

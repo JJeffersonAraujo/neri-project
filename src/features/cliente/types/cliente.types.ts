@@ -2,7 +2,7 @@ export interface ICreateUserPayload {
   name: string
   email: string
   password: string
-  role: 'cliente'
+  role: string
 }
 
 export interface IUpdateUserPayload {
@@ -16,7 +16,7 @@ export interface IUser {
   name: string
   email: string
   password: string
-  role: 'cliente'
+  role: string
   createdAt: Date
   updatedAt: Date
 }
