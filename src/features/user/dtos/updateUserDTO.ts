@@ -1,16 +1,13 @@
 import { Router } from 'express'
-import { AdminController, profissionalSaudeController, gestorController, clienteController } from '../../user/controllers/userControllers'
-import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware'
+import { UserController } from '../../user/controllers/userControllers.js'
+import { authMiddleware } from '../../../shared/middleware/jwtMiddleware.js'
 
 const router = Router()
-const controller = new AdminController()
-const controllerProfissional = new profissionalSaudeController()
-const controllerGestor = new gestorController()
-const controllerCliente = new clienteController()
+const controller = new UserController()
 
 router.put('/admin/:id', authMiddleware, controller.update)
-router.put('/profissional/:id', authMiddleware, controllerProfissional.update)
-router.put('/gestor/:id', authMiddleware, controllerGestor.update)
-router.put('/cliente/:id', authMiddleware, controllerCliente.update)
+router.put('/profissional/:id', authMiddleware, controller.update)
+router.put('/gestor/:id', authMiddleware, controller.update)
+router.put('/cliente/:id', authMiddleware, controller.update)
 
 export default router

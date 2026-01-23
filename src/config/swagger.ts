@@ -1,4 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc'
+import path from 'path'
 
 const apiUrl = process.env.API_BASE_URL || 'http://localhost:3000'
 
@@ -13,8 +14,9 @@ export const swaggerSpec = swaggerJSDoc({
     servers: [
       {
         url: `${apiUrl}/api`,
-        description:
-          apiUrl.includes('localhost') ? 'Servidor local' : 'Servidor online',
+        description: apiUrl.includes('localhost')
+          ? 'Servidor local'
+          : 'Servidor online',
       },
     ],
     components: {
@@ -28,5 +30,9 @@ export const swaggerSpec = swaggerJSDoc({
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ['./src/features/**/routes/*.ts'],
+
+  // 🔥 AQUI ESTÁ O SEGREDO
+  apis: [
+    path.resolve(process.cwd(), 'src/features/**/routes/*.{ts,js}'),
+  ],
 })

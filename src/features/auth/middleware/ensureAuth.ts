@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { jwtConfig } from '../../../config/jwt';
+import { jwtConfig } from '../../../../src/config/jwt.js';
+import { Role } from '@prisma/client';
 
 interface TokenPayload {
-  userId: string;
+  sub: number;
+  role: Role;
 }
 
 export function ensureAuth(
@@ -20,9 +22,17 @@ export function ensureAuth(
   const [, token] = authHeader.split(' ');
 
   try {
-    const decoded = jwt.verify(token, jwtConfig.secret) as TokenPayload;
+    const decoded = jwt.verify(token, jwtConfig.secret) as unknown as TokenPayload;
 
-    req.user = { id: decoded.userId };
+    // Validação extra para garantir que role existe
+    if (!decoded || !decoded.role) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    req.user = {
+      id: String(decoded.sub),
+      role: decoded.role
+    };
 
     return next();
   } catch {

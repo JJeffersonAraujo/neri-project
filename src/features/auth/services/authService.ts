@@ -15,7 +15,7 @@ export class AuthService {
     }
 
     const passwordMatch = await bcrypt.compare(
-      data.password,
+      data.senha,
       user.senhaHash
     )
 
@@ -25,8 +25,8 @@ export class AuthService {
 
     const token = jwt.sign(
       {
-        sub: user.id,
-        role: user.role,
+        id: user.id,       // ✅ adicionado
+        role: user.role,   // ✅ já estava
       },
       jwtConfig.secret,
       {

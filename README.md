@@ -109,3 +109,54 @@ Swagger:
 http://localhost:3000/docs
 
 ==================================================
+
+
+📌 README (Resumido) - Neri Project API (Em Construção)
+✅ Descrição
+
+API em Node.js + TypeScript + Express + Prisma com autenticação JWT e CRUD de usuários.
+⚠️ Projeto ainda em desenvolvimento — funcionalidades estão sendo implementadas.
+
+🔐 Autenticação
+
+POST /api/auth/login → gera token JWT
+
+Token necessário para acessar rotas protegidas
+
+👤 CRUD Usuários
+
+POST /api/users → criar usuário
+
+GET /api/users → listar usuários
+
+GET /api/users/:id → buscar por id
+
+PUT /api/users/:id → atualizar usuário
+
+DELETE /api/users/:id → deletar (soft delete)
+
+🔑 Password (Em implementação)
+
+Estamos implementando recuperação de senha, com rotas como:
+
+POST /api/auth/forgot-password
+
+POST /api/auth/reset-password
+
+A senha é armazenada com hash usando bcrypt, garantindo segurança.
+
+⚙️ Configuração
+
+Crie .env com:
+
+DATABASE_URL=
+JWT_SECRET=
+JWT_EXPIRES_IN=1d
+
+🚀 Rodando o Projeto
+npm install
+npm run dev
+
+📌 Prisma
+npx prisma migrate dev
+npx prisma generate

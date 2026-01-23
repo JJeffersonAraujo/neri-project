@@ -16,6 +16,7 @@ export class UserService {
     })
 
     if (emailExists) {
+      // NÃO QUEBRAR API: Retorna erro controlado
       throw new Error('E-mail já cadastrado')
     }
 
@@ -53,7 +54,10 @@ export class UserService {
 
   async findById(id: number) {
     const user = await prisma.usuario.findFirst({
-      where: { id, deletedAt: null },
+      where: {
+        deletedAt: null,
+        id: { equals: id }, // ✅ CORREÇÃO DO PRISMA (id precisa de filtro)
+      },
       select: {
         id: true,
         nome: true,
@@ -68,7 +72,10 @@ export class UserService {
   }
 
   async update(id: number, data: Partial<CreateUserDTO>) {
-    const user = await prisma.usuario.findUnique({ where: { id } })
+    const user = await prisma.usuario.findUnique({
+      where: { id },
+    })
+
     if (!user || user.deletedAt) throw new Error('Usuário não encontrado')
 
     const updateData: any = {}

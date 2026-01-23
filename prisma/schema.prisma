@@ -1,17 +1,21 @@
-// Generator para criar o Prisma Client
+// ==========================
+// Generator
+// ==========================
 generator client {
   provider = "prisma-client-js"
 }
 
+// ==========================
 // Datasource
+// ==========================
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-/*
- ENUMS
-*/
+// ==========================
+// ENUMS
+// ==========================
 enum Role {
   ADMIN
   GESTOR
@@ -19,32 +23,33 @@ enum Role {
   USER
 }
 
-/*
- MODELS
-*/
+// ==========================
+// MODELS
+// ==========================
 model Usuario {
-  id         Int      @id @default(autoincrement())
-  nome       String
-  email      String   @unique
-  senhaHash  String   @map("senha_hash")
-  role       Role
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  deletedAt  DateTime?
+  id        Int       @id @default(autoincrement())
+  nome      String
+  email     String    @unique
+  senhaHash String    @map("senha_hash")
+  role      Role
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
-  profissional Profissional?
-  sessoes      AuthSessao[]
+  profissional        Profissional?
+  sessoes             AuthSessao[]
+  passwordResetTokens PasswordResetToken[] // relação inversa correta
 
   @@index([email])
 }
 
 model AuthSessao {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   usuarioId Int
-  token     String   @unique
+  token     String    @unique
   expiresAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
   usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
@@ -53,10 +58,10 @@ model AuthSessao {
 }
 
 model TipoProfissional {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   nome      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
   profissionais Profissional[]
@@ -64,13 +69,13 @@ model TipoProfissional {
 }
 
 model Profissional {
-  id                Int      @id @default(autoincrement())
-  usuarioId         Int      @unique
+  id                 Int       @id @default(autoincrement())
+  usuarioId          Int       @unique
   tipoProfissionalId Int
   conselho           String
   numeroRegistro     String
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
   deletedAt          DateTime?
 
   usuario          Usuario          @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
@@ -79,28 +84,28 @@ model Profissional {
 }
 
 model Escala {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   nome       String
   dataInicio DateTime
   dataFim    DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
 
-  plantoes           Plantao[]
-  jornadaExecutadas  JornadaExecutada[]
-  jornadaCalculadas  JornadaCalculada[]
+  plantoes          Plantao[]
+  jornadaExecutadas JornadaExecutada[]
+  jornadaCalculadas JornadaCalculada[]
 }
 
 model Plantao {
-  id             Int      @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   escalaId       Int
   profissionalId Int
   data           DateTime
   horaInicio     DateTime
   horaFim        DateTime
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
   escala       Escala       @relation(fields: [escalaId], references: [id], onDelete: Cascade)
@@ -109,16 +114,16 @@ model Plantao {
 }
 
 model Atividade {
-  id                 Int      @id @default(autoincrement())
+  id                 Int       @id @default(autoincrement())
   plantaoId          Int
   tipoProfissionalId Int
   descricao          String
   horario            DateTime
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
   deletedAt          DateTime?
 
-  plantao         Plantao         @relation(fields: [plantaoId], references: [id], onDelete: Cascade)
+  plantao          Plantao          @relation(fields: [plantaoId], references: [id], onDelete: Cascade)
   tipoProfissional TipoProfissional @relation(fields: [tipoProfissionalId], references: [id])
 }
 
@@ -142,4 +147,20 @@ model JornadaCalculada {
   createdAt          DateTime @default(now())
 
   escala Escala @relation(fields: [escalaId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  usuarioId Int
+  expiresAt DateTime
+  used      Boolean  @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
 }

@@ -1,10 +1,11 @@
-// src/shared/middleware/jwtMiddleware.ts
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import { jwtConfig } from '../utils/jwt.util.js'
+import { jwtConfig } from '../../config/jwt.js'
+import { Role } from '@prisma/client'
 
 interface TokenPayload {
-  id: number
+  sub: number
+  role: Role
 }
 
 export function authMiddleware(
@@ -21,14 +22,19 @@ export function authMiddleware(
   const [, token] = authHeader.split(' ')
 
   try {
-    const decoded = jwt.verify(token, jwtConfig.secret) as TokenPayload
+    const decoded = jwt.verify(token, jwtConfig.secret) as unknown as TokenPayload
+
+    if (!decoded || !decoded.role || !Object.values(Role).includes(decoded.role)) {
+      return res.status(401).json({ message: 'Token inválido ou expirado' })
+    }
 
     req.user = {
-      id: String(decoded.id)
+      id: String(decoded.sub),
+      role: decoded.role,
     }
 
     return next()
   } catch {
-    return res.status(401).json({ message: 'Token inválido' })
+    return res.status(401).json({ message: 'Token inválido ou expirado' })
   }
 }
