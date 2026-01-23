@@ -6,7 +6,17 @@ export class AdminService {
   }
 
   static async findAll(): Promise<IUser[]> {
-    return []
+    return [
+      {
+        id: '1',
+        name: 'Admin Teste',
+        email: 'admin@teste.com',
+        password: 'hashed_password',
+        role: 'admin',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+    ]
   }
 
   static async findById(id: string): Promise<IUser | null> {

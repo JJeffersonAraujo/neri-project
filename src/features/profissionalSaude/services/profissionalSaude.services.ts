@@ -1,4 +1,4 @@
-import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/profissionalSaude.types'
+import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/profissionalSaude.types.js'
 
 export class profissionalSaudeService {
   static async create(data: ICreateUserPayload): Promise<{ message: string; data: ICreateUserPayload }> {
@@ -6,7 +6,17 @@ export class profissionalSaudeService {
   }
 
   static async findAll(): Promise<IUser[]> {
-    return []
+    return [
+      {
+        id: '1',
+        name: 'Profissional de Saúde Teste',
+        email: 'profissional@teste.com',
+        password: 'hashed_password',
+        role: 'profissionalSaude',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+    ]
   }
 
   static async findById(id: string): Promise<IUser | null> {

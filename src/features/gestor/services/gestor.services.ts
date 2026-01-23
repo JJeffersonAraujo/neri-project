@@ -6,7 +6,17 @@ export class gestorService {
   }
 
   static async findAll(): Promise<IUser[]> {
-    return []
+    return [
+      {
+        id: '1',
+        name: 'Gestor Teste',
+        email: 'gestor@teste.com',
+        password: 'hashed_password',
+        role: 'gestor',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }
+    ]
   }
 
   static async findById(id: string): Promise<IUser | null> {
