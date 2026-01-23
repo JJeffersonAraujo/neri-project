@@ -4,17 +4,28 @@ import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createAdminSchema } from '../dtos/admin.dtos.js'
 
+import { devAuthMiddleware } from '../../../shared/middleware/devAuth.middleware.js'
+
+
 const router = Router()
 const controller = new AdminController()
 
 /**
- * @openapi
+ * @swagger
+ * tags:
+ *   name: Administrador
+ *   description: Rotas de gerenciamento de administradores
+ */
+
+/**
+ * @swagger
  * /admins:
  *   post:
  *     summary: Criar administrador
  *     tags:
- *       - Administrador
- *   
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -50,9 +61,38 @@ router.post(
   controller.create
 )
 
-router.get('/', authMiddleware, controller.findAll)
-router.get('/:id', authMiddleware, controller.findById)
-router.put('/:id', authMiddleware, controller.update)
-router.delete('/:id', authMiddleware, controller.delete)
+/**
+ * @swagger
+ * /admins:
+ *   get:
+ *     summary: Listar administradores
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de administradores
+ *       401:
+ *        description: Não autorizado
+ *       400:
+ *        description: Erro de validação
+ *       404:
+ *        description: Administrador não encontrado
+ */
+router.get('/', devAuthMiddleware, controller.findAll)
+/*router.get('/', authMiddleware, controller.findAll)*/
+
+
+router.get('/:id', devAuthMiddleware, controller.findById)
+/*router.get('/:id', authMiddleware, controller.findById)*/
+
+
+router.put('/:id', devAuthMiddleware, controller.update)
+/*router.put('/:id', authMiddleware, controller.update)*/
+
+
+router.delete('/:id', devAuthMiddleware, controller.delete)
+/*router.delete('/:id', authMiddleware, controller.delete)*/
 
 export { router as adminRoutes }

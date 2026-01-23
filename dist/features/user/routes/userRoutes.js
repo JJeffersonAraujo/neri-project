@@ -7,9 +7,9 @@ import { profissionalSaudeRoutes } from '../../profissionalSaude/routes/profissi
 const routes = Router();
 /*routes.use('/auth', authRoutes)*/
 routes.use('/admins', adminRoutes);
-routes.use('/cliente', clienteRoutes);
-routes.use('/gestor', gestorRoutes);
-routes.use('/profissionalSaude', profissionalSaudeRoutes);
+routes.use('/clientes', clienteRoutes);
+routes.use('/gestores', gestorRoutes);
+routes.use('/profsaude', profissionalSaudeRoutes);
 export { routes };
 /*import { Router } from 'express'
 import { UserController } from '../controllers/userControllers.js'

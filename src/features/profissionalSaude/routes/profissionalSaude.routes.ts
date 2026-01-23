@@ -4,17 +4,26 @@ import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createProfissionalSaudeSchema } from '../dtos/profissionalSaude.dtos.js'
 
+import { devAuthMiddleware } from '../../../shared/middleware/devAuth.middleware.js'
+
 const router = Router()
 const controller = new profissionalSaudeController()
 
 /**
- * @openapi
+ * @swagger
+ * tags:
+ *   name: Prof-Saúde
+ *   description: Rotas de gerenciamento de profissionais de saúde
+ */
+
+/**
+ * @swagger
  * /profsaude:
  *   post:
  *     summary: Criar Prof-Saúde
  *     tags:
- *       - Prof-Saúde
- *   
+ *       - [Prof-Saúde]
+ *   security:
  *     requestBody:
  *       required: true
  *       content:
@@ -51,9 +60,38 @@ router.post(
   controller.create
 )
 
-router.get('/', authMiddleware, controller.findAll)
-router.get('/:id', authMiddleware, controller.findById)
-router.put('/:id', authMiddleware, controller.update)
-router.delete('/:id', authMiddleware, controller.delete)
+/**
+ * @swagger
+ * /profsaude:
+ *   get:
+ *     summary: Listar profissionais de saúde
+ *     tags:
+ *       - [Prof-Saúde]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de profissionais de saúde
+ *       401:
+ *        description: Não autorizado
+ *       400:
+ *        description: Erro de validação
+ *       404:
+ *        description: Profissional de saúde não encontrado
+ */
+router.get('/', devAuthMiddleware, controller.findAll)
+/*router.get('/', authMiddleware, controller.findAll)*/
+
+
+router.get('/:id', devAuthMiddleware, controller.findById)
+/*router.get('/:id', authMiddleware, controller.findById)*/
+
+
+router.put('/:id', devAuthMiddleware, controller.update)
+/*router.put('/:id', authMiddleware, controller.update)*/
+
+
+router.delete('/:id', devAuthMiddleware, controller.delete)
+/*router.delete('/:id', authMiddleware, controller.delete)*/
 
 export { router as profissionalSaudeRoutes }

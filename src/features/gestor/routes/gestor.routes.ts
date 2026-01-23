@@ -4,17 +4,27 @@ import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createGestorSchema } from '../dtos/gestor.dtos.js'
 
+import { devAuthMiddleware } from '../../../shared/middleware/devAuth.middleware.js'
+
 const router = Router()
 const controller = new gestorController()
 
 /**
- * @openapi
+ * @swagger
+ * tags:
+ *   name: Gestores
+ *   description: Rotas de gerenciamento de gestores
+ */
+
+/**
+ * @swagger
  * /gestores:
  *   post:
  *     summary: Criar Gestores
  *     tags:
- *       - Gestores
- *   
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -44,16 +54,44 @@ const controller = new gestorController()
  *       400:
  *         description: Erro de validação
  */
-
 router.post(
   '/',
   validateDto(createGestorSchema),
   controller.create
 )
 
-router.get('/', authMiddleware, controller.findAll)
-router.get('/:id', authMiddleware, controller.findById)
-router.put('/:id', authMiddleware, controller.update)
-router.delete('/:id', authMiddleware, controller.delete)
+/**
+ * @swagger
+ * /gestores:
+ *   get:
+ *     summary: Listar gestores
+ *     tags:
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de gestores
+ *       401:
+ *        description: Não autorizado
+ *       400:
+ *        description: Erro de validação
+ *       404:
+ *        description: Gestor não encontrado
+ */
+router.get('/', devAuthMiddleware, controller.findAll)
+/*router.get('/', authMiddleware, controller.findAll)*/
+
+
+router.get('/:id', devAuthMiddleware, controller.findById)
+/*router.get('/:id', authMiddleware, controller.findById)*/
+
+
+router.put('/:id', devAuthMiddleware, controller.update)
+/*router.put('/:id', authMiddleware, controller.update)*/
+
+
+router.delete('/:id', devAuthMiddleware, controller.delete)
+/*router.delete('/:id', authMiddleware, controller.delete)*/
 
 export { router as gestorRoutes }
