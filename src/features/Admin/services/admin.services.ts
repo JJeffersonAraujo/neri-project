@@ -19,9 +19,18 @@ export class AdminService {
     ]
   }
 
-  static async findById(id: string): Promise<IUser | null> {
+static async findById(id: string): Promise<IUser | null> {
+  if (id !== '1') {
     return null
   }
+
+  return {
+        id: '1',
+        name: 'Admin Teste',
+        email: 'admin@teste.com',
+      }
+}
+
 
   static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload }> {
     return { id, data }

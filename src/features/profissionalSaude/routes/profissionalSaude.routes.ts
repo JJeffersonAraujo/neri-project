@@ -75,7 +75,27 @@ router.post(
 router.get('/', devAuthMiddleware, controller.findAll)
 /*router.get('/', authMiddleware, controller.findAll)*/
 
-
+/**
+ * @swagger
+ * /profSaude/{id}:
+ *   get:
+ *     summary: Buscar profissional de saúde por ID
+ *     tags:
+ *       - [Prof-Saúde]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Profissional de saúde encontrado
+ *       404:
+ *        description: Profissional de saúde não encontrado
+ */
 router.get('/:id', devAuthMiddleware, controller.findById)
 /*router.get('/:id', authMiddleware, controller.findById)*/
 

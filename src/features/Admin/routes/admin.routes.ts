@@ -78,7 +78,7 @@ router.get('/', devAuthMiddleware, controller.findAll)
 
 /**
  * @swagger
- * /api/admins/{id}:
+ * /admins/{id}:
  *   get:
  *     summary: Buscar administrador por ID
  *     tags:
@@ -90,7 +90,7 @@ router.get('/', devAuthMiddleware, controller.findAll)
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: number
  *     responses:
  *       200:
  *         description: Administrador encontrado

@@ -75,7 +75,27 @@ router.post(
 router.get('/', devAuthMiddleware, controller.findAll)
 /*router.get('/', authMiddleware, controller.findAll)*/
 
-
+/**
+ * @swagger
+ * /clientes/{id}:
+ *   get:
+ *     summary: Buscar cliente por ID
+ *     tags:
+ *       - [Clientes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Cliente encontrado
+ *       404:
+ *        description: Cliente não encontrado
+ */
 router.get('/:id', devAuthMiddleware, controller.findById)
 /*router.get('/:id', authMiddleware, controller.findById)*/
 

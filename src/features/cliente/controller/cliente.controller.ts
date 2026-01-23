@@ -15,9 +15,20 @@ export class ClienteController {
     return res.json(await clienteService.findAll())
   }
 
-  async findById(req: Request<{ id: string }>, res: Response) {
-    return res.json(await clienteService.findById(req.params.id))
+  async findById(req: Request, res: Response) {
+  const { id } = req.params
+
+  const user = await clienteService.findById(id)
+
+  if (!user) {
+    return res.status(404).json({
+      message: 'Usuário não encontrado'
+    })
   }
+
+  return res.json(user)
+  //return prisma.user.findUnique({ where: { id } })
+}
 
   async update(req: Request<{ id: string }>, res: Response) {
     return res.json(await clienteService.update(req.params.id, req.body))

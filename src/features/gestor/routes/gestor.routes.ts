@@ -75,7 +75,27 @@ router.post(
 router.get('/', devAuthMiddleware, controller.findAll)
 /*router.get('/', authMiddleware, controller.findAll)*/
 
-
+/**
+ * @swagger
+ * /gestores/{id}:
+ *   get:
+ *     summary: Buscar gestor por ID
+ *     tags:
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Gestor encontrado
+ *       404:
+ *        description: Gestor não encontrado
+ */
 router.get('/:id', devAuthMiddleware, controller.findById)
 /*router.get('/:id', authMiddleware, controller.findById)*/
 
