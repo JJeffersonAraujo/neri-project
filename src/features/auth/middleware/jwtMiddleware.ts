@@ -3,6 +3,10 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import { jwtConfig } from '../../../shared/utils/jwt.util.js'
 import '../../../shared/types/express.types.js'
 
+interface CustomJwtPayload extends JwtPayload {
+  id: string
+}
+
 export function authMiddleware(
   req: Request,
   res: Response,
@@ -17,7 +21,7 @@ export function authMiddleware(
   const [, token] = authHeader.split(' ')
 
   try {
-    const decoded = jwt.verify(token, jwtConfig.secret) as JwtPayload
+    const decoded = jwt.verify(token, jwtConfig.secret) as CustomJwtPayload
     req.user = decoded
     next()
   } catch {
