@@ -24,7 +24,10 @@ export class clienteService {
       id,
       name: 'Cliente Teste',
       email: 'cliente@teste.com',
+      password: 'hashed_password',
       role: 'clientes',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
   }
 
