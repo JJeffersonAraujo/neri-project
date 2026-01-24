@@ -16,41 +16,51 @@ export class ClienteController {
   }
 
   async findById(req: Request, res: Response) {
-  const { id } = req.params
+    const { id } = req.params
 
-  const user = await clienteService.findById(id)
+    const user = await clienteService.findById(id)
 
-  if (!user) {
-    return res.status(404).json({
-      message: 'Usuário não encontrado'
+    if (!user) {
+      return res.status(404).json({
+        message: 'Usuário não encontrado'
+      })
+    }
+
+    return res.json(user)
+  }
+
+  async update(req: Request, res: Response) {
+    const { id } = req.params
+    const data = req.body
+
+    const cliente = await clienteService.update(id, data)
+
+    if (!cliente) {
+      return res.status(404).json({
+        message: 'Cliente não encontrado',
+      })
+    }
+
+    return res.json({
+      message: 'Cliente atualizado',
+      data: cliente,
     })
   }
 
-  return res.json(user)
-  //return prisma.user.findUnique({ where: { id } })
-}
+  async delete(req: Request, res: Response) {
+    const { id } = req.params
 
-async update(req: Request, res: Response) {
-  const { id } = req.params
-  const data = req.body
+    const deleted = await clienteService.delete(id)
 
-  const cliente = await clienteService.update(id, data)
+    if (!deleted) {
+      return res.status(404).json({
+        message: 'Cliente não encontrado',
+      })
+    }
 
-  if (!cliente) {
-    return res.status(404).json({
-      message: 'Cliente não encontrado',
+    return res.status(204).send({
+      message: 'Cliente removido',
     })
   }
-
-  return res.json({
-    message: 'Cliente atualizado',
-    data: cliente,
-  })
-
 }
 
-  async delete(req: Request<{ id: string }>, res: Response) {
-    await clienteService.delete(req.params.id)
-    return res.status(204).send()
-  }
-}

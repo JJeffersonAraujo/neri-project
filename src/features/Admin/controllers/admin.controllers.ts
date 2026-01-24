@@ -51,8 +51,19 @@ async update(req: Request, res: Response) {
 
 }
 
-  async delete(req: Request<{ id: string }>, res: Response) {
-    await AdminService.delete(req.params.id)
-    return res.status(204).send()
+  async delete(req: Request, res: Response) {
+    const { id } = req.params
+
+    const deleted = await AdminService.delete(id)
+
+    if (!deleted) {
+      return res.status(404).json({
+        message: 'Admin não encontrado',
+      })
+    }
+
+    return res.status(204).send({
+      message: 'Admin removido',
+    })
   }
 }

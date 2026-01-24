@@ -123,7 +123,27 @@ router.get('/:id', devAuthMiddleware, controller.findById)
 router.put('/:id', devAuthMiddleware, controller.update)
 /*router.put('/:id', authMiddleware, controller.update)*/
 
-
+/**
+ * @swagger
+ * /profsaude/{id}:
+ *   delete:
+ *     summary: Remover profissional de saúde
+ *     tags:
+ *       - [Prof-Saúde]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Profissional de saúde removido
+ *       404:
+ *         description: Profissional de saúde não encontrado
+ */
 router.delete('/:id', devAuthMiddleware, controller.delete)
 /*router.delete('/:id', authMiddleware, controller.delete)*/
 

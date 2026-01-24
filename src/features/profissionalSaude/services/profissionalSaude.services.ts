@@ -47,7 +47,13 @@ export class profissionalSaudeService {
     }
   }
 
-  static async delete(id: string): Promise<void> {
-    return
+  static async delete(id: string): Promise<boolean> {
+  // simulação de banco
+    if (id !== '1') {
+      return false
+   }
+
+    return true
   }
+
 }

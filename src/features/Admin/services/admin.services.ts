@@ -48,7 +48,13 @@ static async findById(id: string): Promise<IUser | null> {
      }
    }
 
-  static async delete(id: string): Promise<void> {
-    return
+  static async delete(id: string): Promise<boolean> {
+  // simulação de banco
+    if (id !== '1') {
+      return false
+   }
+
+    return true
   }
+
 }

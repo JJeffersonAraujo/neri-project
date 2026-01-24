@@ -123,7 +123,27 @@ router.get('/:id', devAuthMiddleware, controller.findById)
 router.put('/:id', devAuthMiddleware, controller.update)
 /*router.put('/:id', authMiddleware, controller.update)*/
 
-
+/**
+ * @swagger
+ * /clientes/{id}:
+ *   delete:
+ *     summary: Remover cliente
+ *     tags:
+ *       - [Clientes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Cliente removido
+ *       404:
+ *         description: Cliente não encontrado
+ */
 router.delete('/:id', devAuthMiddleware, controller.delete)
 /*router.delete('/:id', authMiddleware, controller.delete)*/
 

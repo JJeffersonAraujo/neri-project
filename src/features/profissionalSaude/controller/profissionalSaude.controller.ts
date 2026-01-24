@@ -49,8 +49,19 @@ export class profissionalSaudeController {
   
   }
 
-  async delete(req: Request<{ id: string }>, res: Response) {
-    await profissionalSaudeService.delete(req.params.id)
-    return res.status(204).send()
+  async delete(req: Request, res: Response) {
+    const { id } = req.params
+
+    const deleted = await profissionalSaudeService.delete(id)
+
+    if (!deleted) {
+      return res.status(404).json({
+        message: 'Profissional de saúde não encontrado',
+      })
+    }
+
+    return res.status(204).send({
+      message: 'Profissional de saúde removido',
+    })
   }
 }
