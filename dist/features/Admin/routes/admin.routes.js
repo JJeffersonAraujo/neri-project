@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { AdminController } from '../controllers/admin.controller.js';
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js';
+import { authorize } from '@/shared/middleware/authorize.middleware.js';
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js';
 import { createAdminSchema } from '../dtos/admin.dtos.js';
 const router = Router();
@@ -43,7 +44,7 @@ const controller = new AdminController();
  *       400:
  *         description: Erro de validação
  */
-router.post('/', validateDto(createAdminSchema), controller.create);
+router.post('/', authMiddleware, authorize('ADMIN', 'GESTOR'), validateDto(createAdminSchema), controller.create);
 /**
  * @swagger
  * /admins:
@@ -63,7 +64,7 @@ router.post('/', validateDto(createAdminSchema), controller.create);
  *       404:
  *        description: Administrador não encontrado
  */
-router.get('/', authMiddleware, controller.findAll);
+router.get('/', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.findAll);
 /**
  * @swagger
  * /admins/{id}:
@@ -85,7 +86,7 @@ router.get('/', authMiddleware, controller.findAll);
  *       404:
  *        description: Administrador não encontrado
  */
-router.get('/:id', authMiddleware, controller.findById);
+router.get('/:id', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.findById);
 /**
  * @swagger
  * /admins/{id}:
@@ -107,7 +108,7 @@ router.get('/:id', authMiddleware, controller.findById);
  *       404:
  *         description: Administrador não encontrado
  */
-router.put('/:id', authMiddleware, controller.update);
+router.put('/:id', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.update);
 /**
  * @swagger
  * /admins/{id}:
@@ -129,5 +130,5 @@ router.put('/:id', authMiddleware, controller.update);
  *       404:
  *         description: Administrador não encontrado
  */
-router.delete('/:id', authMiddleware, controller.delete);
+router.delete('/:id', authMiddleware, authorize('ADMIN'), controller.delete);
 export { router as adminRoutes };

@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import { jwtConfig } from '../../../shared/utils/jwt.util.js';
-import '../../../shared/types/express.types.js';
 export function authMiddleware(req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {

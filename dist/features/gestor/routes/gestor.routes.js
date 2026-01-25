@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { gestorController } from '../controller/gestor.controller.js';
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js';
+import { authorize } from '@/shared/middleware/authorize.middleware.js';
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js';
 import { createGestorSchema } from '../dtos/gestor.dtos.js';
 const router = Router();
@@ -43,7 +44,7 @@ const controller = new gestorController();
  *       400:
  *         description: Erro de validação
  */
-router.post('/', validateDto(createGestorSchema), controller.create);
+router.post('/', authMiddleware, authorize('GESTOR', 'ADMIN'), validateDto(createGestorSchema), controller.create);
 /**
  * @swagger
  * /gestores:
@@ -63,7 +64,7 @@ router.post('/', validateDto(createGestorSchema), controller.create);
  *       404:
  *        description: Gestor não encontrado
  */
-router.get('/', authMiddleware, controller.findAll);
+router.get('/', authMiddleware, authorize('GESTOR', 'ADMIN'), controller.findAll);
 /**
  * @swagger
  * /gestores/{id}:
@@ -85,7 +86,7 @@ router.get('/', authMiddleware, controller.findAll);
  *       404:
  *        description: Gestor não encontrado
  */
-router.get('/:id', authMiddleware, controller.findById);
+router.get('/:id', authMiddleware, authorize('GESTOR', 'ADMIN'), controller.findById);
 /**
  * @swagger
  * /gestores/{id}:
@@ -107,7 +108,7 @@ router.get('/:id', authMiddleware, controller.findById);
  *       404:
  *         description: Gestor não encontrado
  */
-router.put('/:id', authMiddleware, controller.update);
+router.put('/:id', authMiddleware, authorize('GESTOR', 'ADMIN'), controller.update);
 /**
  * @swagger
  * /gestores/{id}:
@@ -129,5 +130,5 @@ router.put('/:id', authMiddleware, controller.update);
  *       404:
  *         description: Gestor não encontrado
  */
-router.delete('/:id', authMiddleware, controller.delete);
+router.delete('/:id', authMiddleware, authorize('ADMIN'), controller.delete);
 export { router as gestorRoutes };

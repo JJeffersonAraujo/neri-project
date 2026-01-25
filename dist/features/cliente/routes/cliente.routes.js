@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { ClienteController } from '../controller/cliente.controller.js';
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js';
+import { authorize } from '@/shared/middleware/authorize.middleware.js';
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js';
 import { createClienteSchema } from '../dtos/cliente.dtos.js';
 const router = Router();
@@ -43,7 +44,7 @@ const controller = new ClienteController();
  *       400:
  *         description: Erro de validação
  */
-router.post('/', validateDto(createClienteSchema), controller.create);
+router.post('/', authMiddleware, authorize('CLIENTE'), validateDto(createClienteSchema), controller.create);
 /**
  * @swagger
  * /clientes:
@@ -63,7 +64,7 @@ router.post('/', validateDto(createClienteSchema), controller.create);
  *       404:
  *        description: Cliente não encontrado
  */
-router.get('/', authMiddleware, controller.findAll);
+router.get('/', authMiddleware, authorize('CLIENTE'), controller.findAll);
 /**
  * @swagger
  * /clientes/{id}:
@@ -85,7 +86,7 @@ router.get('/', authMiddleware, controller.findAll);
  *       404:
  *        description: Cliente não encontrado
  */
-router.get('/:id', authMiddleware, controller.findById);
+router.get('/:id', authMiddleware, authorize('CLIENTE'), controller.findById);
 /**
  * @swagger
  * /clientes/{id}:
@@ -107,7 +108,7 @@ router.get('/:id', authMiddleware, controller.findById);
  *       404:
  *         description: Cliente não encontrado
  */
-router.put('/:id', authMiddleware, controller.update);
+router.put('/:id', authMiddleware, authorize('CLIENTE'), controller.update);
 /**
  * @swagger
  * /clientes/{id}:
@@ -129,5 +130,5 @@ router.put('/:id', authMiddleware, controller.update);
  *       404:
  *         description: Cliente não encontrado
  */
-router.delete('/:id', authMiddleware, controller.delete);
+router.delete('/:id', authMiddleware, authorize('ADMIN'), controller.delete);
 export { router as clienteRoutes };
