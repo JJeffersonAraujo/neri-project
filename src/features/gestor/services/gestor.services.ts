@@ -1,60 +1,59 @@
-import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/gestor.types.js'
+import { prisma } from '../../../shared/database/prismaClient.js'
+import { Role } from '@prisma/client'
 
 export class gestorService {
-  static async create(data: ICreateUserPayload): Promise<{ message: string; data: ICreateUserPayload }> {
-    return { message: 'Gestor criado', data }
-  }
-
-  static async findAll(): Promise<IUser[]> {
-    return [
-      {
-        id: '1',
-        name: 'Gestor Teste',
-        email: 'gestor@teste.com',
-        password: 'hashed_password',
-        role: 'gestor',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-    ]
-  }
-
-static async findById(id: string): Promise<IUser | null> {
-  if (id !== '1') {
-    return null
-  }
-
-  return {
-    id: '1',
-    name: 'Gestor Teste',
-    email: 'gestor@teste.com',
-  }
-}
-
-
-  static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload } | null> {
-    // simulação de banco
-    if (id !== '1') {
-      return null
-    }
-
-    return {
-      id: '1',
+  static async create(data: any) {
+    return prisma.usuario.create({
       data: {
-        name: data.name ?? 'Gestor Teste',
-        email: data.email ?? 'gestor@teste.com',
-        role: data.role ?? 'gestor',
+        nome: data.name,
+        email: data.email,
+        senhaHash: data.password,
+        role: Role.GESTOR,
       },
-    }
+    })
+  }
+
+  static async findAll() {
+    return prisma.usuario.findMany({
+      where: {
+        role: Role.GESTOR,
+        deletedAt: null,
+      },
+    })
+  }
+
+  static async findById(id: string) {
+    return prisma.usuario.findFirst({
+      where: {
+        id: Number(id),
+        role: Role.GESTOR,
+        deletedAt: null,
+      },
+    })
+  }
+
+  static async update(id: string, data: any) {
+    const exists = await this.findById(id)
+    if (!exists) return null
+
+    return prisma.usuario.update({
+      where: { id: Number(id) },
+      data: {
+        nome: data.name,
+        email: data.email,
+      },
+    })
   }
 
   static async delete(id: string): Promise<boolean> {
-  // simulação de banco
-    if (id !== '1') {
-      return false
-   }
+    const exists = await this.findById(id)
+    if (!exists) return false
+
+    await prisma.usuario.update({
+      where: { id: Number(id) },
+      data: { deletedAt: new Date() },
+    })
 
     return true
   }
-
 }

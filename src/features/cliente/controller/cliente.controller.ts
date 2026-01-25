@@ -1,12 +1,8 @@
 import { Request, Response } from 'express'
-import { CreateClienteDTO } from '../dtos/cliente.dtos.js'
 import { clienteService } from '../services/cliente.services.js'
 
 export class ClienteController {
-  async create(
-    req: Request<{}, {}, CreateClienteDTO>,
-    res: Response
-  ) {
+  async create(req: Request, res: Response) {
     const cliente = await clienteService.create(req.body)
     return res.status(201).json(cliente)
   }
@@ -16,51 +12,31 @@ export class ClienteController {
   }
 
   async findById(req: Request, res: Response) {
-    const { id } = req.params
+    const cliente = await clienteService.findById(req.params.id)
 
-    const user = await clienteService.findById(id)
-
-    if (!user) {
-      return res.status(404).json({
-        message: 'Usuário não encontrado'
-      })
+    if (!cliente) {
+      return res.status(404).json({ message: 'Cliente não encontrado' })
     }
 
-    return res.json(user)
+    return res.json(cliente)
   }
 
   async update(req: Request, res: Response) {
-    const { id } = req.params
-    const data = req.body
-
-    const cliente = await clienteService.update(id, data)
+    const cliente = await clienteService.update(req.params.id, req.body)
 
     if (!cliente) {
-      return res.status(404).json({
-        message: 'Cliente não encontrado',
-      })
+      return res.status(404).json({ message: 'Cliente não encontrado' })
     }
 
-    return res.json({
-      message: 'Cliente atualizado',
-      data: cliente,
-    })
+    return res.json({ message: 'Cliente atualizado', data: cliente })
   }
 
   async delete(req: Request, res: Response) {
-    const { id } = req.params
-
-    const deleted = await clienteService.delete(id)
-
+    const deleted = await clienteService.delete(req.params.id)
     if (!deleted) {
-      return res.status(404).json({
-        message: 'Cliente não encontrado',
-      })
+      return res.status(404).json({ message: 'Cliente não encontrado' })
     }
 
-    return res.status(204).send({
-      message: 'Cliente removido',
-    })
+    return res.status(204).send()
   }
 }
-

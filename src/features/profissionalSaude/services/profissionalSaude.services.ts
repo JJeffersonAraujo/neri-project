@@ -1,59 +1,59 @@
-import { IUser, ICreateUserPayload, IUpdateUserPayload } from '../types/profissionalSaude.types.js'
+import { prisma } from '../../../shared/database/prismaClient.js'
+import { Role } from '@prisma/client'
 
-export class profissionalSaudeService {
-  static async create(data: ICreateUserPayload): Promise<{ message: string; data: ICreateUserPayload }> {
-    return { message: 'Profissional de saúde criado', data }
-  }
-
-  static async findAll(): Promise<IUser[]> {
-    return [
-      {
-        id: '1',
-        name: 'Profissional de Saúde Teste',
-        email: 'profissional@teste.com',
-        password: 'hashed_password',
-        role: 'profissionalSaude',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-    ]
-  }
-
- static async findById(id: string): Promise<IUser | null> {
-  if (id !== '1') {
-    return null
-  }
-
-  return {
-    id: '1',
-    name: 'Profissional de Saúde Teste',
-    email: 'profissional@teste.com',
-  }
-}
-
-  static async update(id: string, data: IUpdateUserPayload): Promise<{ id: string; data: IUpdateUserPayload } | null> {
-    // simulação de banco
-    if (id !== '1') {
-      return null
-    }
-
-    return {
-      id: '1',
+export class profissionalService {
+  static async create(data: any) {
+    return prisma.usuario.create({
       data: {
-        name: data.name ?? 'Profissional de Saúde Teste',
-        email: data.email ?? 'profissional@teste.com',
-        role: data.role ?? 'profissionalSaude',
+        nome: data.name,
+        email: data.email,
+        senhaHash: data.password,
+        role: Role.PROFISSIONAL,
       },
-    }
+    })
+  }
+
+  static async findAll() {
+    return prisma.usuario.findMany({
+      where: {
+        role: Role.PROFISSIONAL,
+        deletedAt: null,
+      },
+    })
+  }
+
+  static async findById(id: string) {
+    return prisma.usuario.findFirst({
+      where: {
+        id: Number(id),
+        role: Role.PROFISSIONAL,
+        deletedAt: null,
+      },
+    })
+  }
+
+  static async update(id: string, data: any) {
+    const exists = await this.findById(id)
+    if (!exists) return null
+
+    return prisma.usuario.update({
+      where: { id: Number(id) },
+      data: {
+        nome: data.name,
+        email: data.email,
+      },
+    })
   }
 
   static async delete(id: string): Promise<boolean> {
-  // simulação de banco
-    if (id !== '1') {
-      return false
-   }
+    const exists = await this.findById(id)
+    if (!exists) return false
+
+    await prisma.usuario.update({
+      where: { id: Number(id) },
+      data: { deletedAt: new Date() },
+    })
 
     return true
   }
-
 }

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { AdminController } from '../controllers/admin.controllers.js'
+import { AdminController } from '../controllers/admin.controller.js'
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createAdminSchema } from '../dtos/admin.dtos.js'

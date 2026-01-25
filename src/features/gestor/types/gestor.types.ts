@@ -1,3 +1,5 @@
+import { Role } from '@prisma/client'
+
 export interface ICreateUserPayload {
   name: string
   email: string
@@ -8,16 +10,14 @@ export interface IUpdateUserPayload {
   name?: string
   email?: string
   password?: string
-  role: string
 }
 
 export interface IUser {
-  id: string
-  name: string
+  id: number
+  nome: string
   email: string
-  password: string
-  role: string
+  senhaHash: string
+  role: Role
   createdAt: Date
   updatedAt: Date
 }
-

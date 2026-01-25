@@ -1,67 +1,41 @@
 import { Request, Response } from 'express'
-import { profissionalSaudeService } from '../services/profissionalSaude.services.js'
-import { CreateProfissionalSaudeDTO } from '../dtos/profissionalSaude.dtos.js'
+import { profissionalService } from '../services/profissionalSaude.services.js'
 
-export class profissionalSaudeController {
-  async create(
-    req: Request<{}, {}, CreateProfissionalSaudeDTO>,
-    res: Response
-  ) {
-    const profissionalSaude = await profissionalSaudeService.create(req.body)
+export class profissionalController {
+  async create(req: Request, res: Response) {
+    const profissionalSaude = await profissionalService.create(req.body)
     return res.status(201).json(profissionalSaude)
   }
 
   async findAll(req: Request, res: Response) {
-    return res.json(await profissionalSaudeService.findAll())
+    return res.json(await profissionalService.findAll())
   }
 
-   async findById(req: Request, res: Response) {
-   const { id } = req.params
+  async findById(req: Request, res: Response) {
+    const profissionalSaude = await profissionalService.findById(req.params.id)
+    if (!profissionalSaude) {
+      return res.status(404).json({ message: 'Profissional de saúde não encontrado' })
+    }
 
-   const user = await profissionalSaudeService.findById(id)
-
-   if (!user) {
-     return res.status(404).json({
-       message: 'Usuário não encontrado'
-     })
-   }
- 
-   return res.json(user)
-   //return prisma.user.findUnique({ where: { id } })
- }
+    return res.json(profissionalSaude)
+  }
 
   async update(req: Request, res: Response) {
-    const { id } = req.params
-    const data = req.body
-  
-    const profissionalSaude = await profissionalSaudeService.update(id, data)
+    const profissionalSaude = await profissionalService.update(req.params.id, req.body)
 
     if (!profissionalSaude) {
-      return res.status(404).json({
-        message: 'Cliente não encontrado',
-      })
+      return res.status(404).json({ message: 'Profissional de saúde não encontrado' })
     }
-  
-    return res.json({
-      message: 'Profissional de saúde atualizado',
-      data: profissionalSaude,
-    })
-  
+
+    return res.json({ message: 'Profissional de saúde atualizado', data: profissionalSaude })
   }
 
   async delete(req: Request, res: Response) {
-    const { id } = req.params
-
-    const deleted = await profissionalSaudeService.delete(id)
-
+    const deleted = await profissionalService.delete(req.params.id)
     if (!deleted) {
-      return res.status(404).json({
-        message: 'Profissional de saúde não encontrado',
-      })
+      return res.status(404).json({ message: 'Profissional de saúde não encontrado' })
     }
 
-    return res.status(204).send({
-      message: 'Profissional de saúde removido',
-    })
+    return res.status(204).send()
   }
 }

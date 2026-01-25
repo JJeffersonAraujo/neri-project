@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { profissionalSaudeController } from '../controller/profissionalSaude.controller.js'
+import { profissionalController } from '../controller/profissionalSaude.controller.js'
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createProfissionalSaudeSchema } from '../dtos/profissionalSaude.dtos.js'
@@ -7,7 +7,7 @@ import { createProfissionalSaudeSchema } from '../dtos/profissionalSaude.dtos.js
 import { devAuthMiddleware } from '../../../shared/middleware/devAuth.middleware.js'
 
 const router = Router()
-const controller = new profissionalSaudeController()
+const controller = new profissionalController()
 
 /**
  * @swagger
@@ -147,4 +147,4 @@ router.put('/:id', devAuthMiddleware, controller.update)
 router.delete('/:id', devAuthMiddleware, controller.delete)
 /*router.delete('/:id', authMiddleware, controller.delete)*/
 
-export { router as profissionalSaudeRoutes }
+export { router as profissionalRoutes }
