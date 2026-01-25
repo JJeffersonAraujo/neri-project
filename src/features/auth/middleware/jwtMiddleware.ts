@@ -4,7 +4,8 @@ import { jwtConfig } from '../../../shared/utils/jwt.util.js'
 import '../../../shared/types/express.types.js'
 
 interface CustomJwtPayload extends JwtPayload {
-  id: string
+  sub: string 
+  role: string
 }
 
 export function authMiddleware(
@@ -22,8 +23,13 @@ export function authMiddleware(
 
   try {
     const decoded = jwt.verify(token, jwtConfig.secret) as CustomJwtPayload
-    req.user = decoded
-    next()
+
+    req.user = {
+      id: decoded.sub.toString(),
+      role: decoded.role,
+    }
+
+    return next()
   } catch {
     return res.status(401).json({ message: 'Token inválido' })
   }

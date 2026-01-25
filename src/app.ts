@@ -1,7 +1,8 @@
 import express from 'express'
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './config/swagger.js'
-import { routes } from './features/user/routes/userRoutes.js'
+import { authRoutes } from './features/auth/routes/authRoutes.js'
+import { routes as userRoutes } from './features/user/routes/userRoutes.js'
 
 const app = express()
 
@@ -10,11 +11,15 @@ const app = express()
 // ==========================
 app.use(express.json())
 
-// ROTAS DA API
-app.use('/api', routes)
+// ==========================
+// Rotas da API
+// ==========================
+app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
 
-// SWAGGER (TEM QUE SER DEPOIS DO EXPRESS.JSON)
+// ==========================
+// Swagger
+// ==========================
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 export { app }
-
