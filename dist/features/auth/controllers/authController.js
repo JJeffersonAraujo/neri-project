@@ -1,13 +1,20 @@
 import { AuthService } from '../services/authService.js';
+import { loginSchema } from '../dtos/loginDTO.js';
 export class AuthController {
     authService = new AuthService();
     async login(req, res) {
-        try {
-            const { email, senha } = req.body;
-            const result = await this.authService.login({
-                email,
-                password: senha,
+        const parsed = loginSchema.safeParse({
+            email: req.body.email,
+            password: req.body.senha, // aceita "senha" do Swagger
+        });
+        if (!parsed.success) {
+            return res.status(400).json({
+                message: 'Dados inválidos',
+                errors: parsed.error.format(),
             });
+        }
+        try {
+            const result = await this.authService.login(parsed.data);
             return res.json(result);
         }
         catch (error) {

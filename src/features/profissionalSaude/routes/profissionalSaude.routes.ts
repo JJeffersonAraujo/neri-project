@@ -1,10 +1,9 @@
 import { Router } from 'express'
 import { profissionalController } from '../controller/profissionalSaude.controller.js'
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
+import { authorize } from '@/shared/middleware/authorize.middleware.js'
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createProfissionalSaudeSchema } from '../dtos/profissionalSaude.dtos.js'
-
-import { devAuthMiddleware } from '../../../shared/middleware/devAuth.middleware.js'
 
 const router = Router()
 const controller = new profissionalController()
@@ -48,7 +47,7 @@ const controller = new profissionalController()
  */
 
 router.post(
-  '/',
+  '/',authMiddleware,authorize('PROFISSIONAL', 'ADMIN'),
   validateDto(createProfissionalSaudeSchema),
   controller.create
 )
@@ -72,8 +71,7 @@ router.post(
  *       404:
  *        description: Profissional de saúde não encontrado
  */
-router.get('/', devAuthMiddleware, controller.findAll)
-/*router.get('/', authMiddleware, controller.findAll)*/
+router.get('/', authMiddleware, authorize('PROFISSIONAL', 'ADMIN'), controller.findAll)
 
 /**
  * @swagger
@@ -96,8 +94,7 @@ router.get('/', devAuthMiddleware, controller.findAll)
  *       404:
  *        description: Profissional de saúde não encontrado
  */
-router.get('/:id', devAuthMiddleware, controller.findById)
-/*router.get('/:id', authMiddleware, controller.findById)*/
+router.get('/:id', authMiddleware, authorize('PROFISSIONAL', 'ADMIN'), controller.findById)
 
 /**
  * @swagger
@@ -120,8 +117,7 @@ router.get('/:id', devAuthMiddleware, controller.findById)
  *       404:
  *         description: Profissional de saúde não encontrado
  */
-router.put('/:id', devAuthMiddleware, controller.update)
-/*router.put('/:id', authMiddleware, controller.update)*/
+router.put('/:id', authMiddleware, authorize('PROFISSIONAL', 'ADMIN'), controller.update)
 
 /**
  * @swagger
@@ -144,7 +140,6 @@ router.put('/:id', devAuthMiddleware, controller.update)
  *       404:
  *         description: Profissional de saúde não encontrado
  */
-router.delete('/:id', devAuthMiddleware, controller.delete)
-/*router.delete('/:id', authMiddleware, controller.delete)*/
+router.delete('/:id', authMiddleware, authorize('ADMIN'), controller.delete)
 
 export { router as profissionalRoutes }

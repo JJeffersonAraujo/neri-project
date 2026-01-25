@@ -1,27 +1,53 @@
+import { prisma } from '../../../shared/database/prismaClient.js';
+import { Role } from '@prisma/client';
 export class AdminService {
     static async create(data) {
-        return { message: 'Admin criado', data };
+        return prisma.usuario.create({
+            data: {
+                nome: data.name,
+                email: data.email,
+                senhaHash: data.password,
+                role: Role.ADMIN,
+            },
+        });
     }
     static async findAll() {
-        return [
-            {
-                id: '1',
-                name: 'Admin Teste',
-                email: 'admin@teste.com',
-                password: 'hashed_password',
-                role: 'admin',
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            }
-        ];
+        return prisma.usuario.findMany({
+            where: {
+                role: Role.ADMIN,
+                deletedAt: null,
+            },
+        });
     }
     static async findById(id) {
-        return null;
+        return prisma.usuario.findFirst({
+            where: {
+                id: Number(id),
+                role: Role.ADMIN,
+                deletedAt: null,
+            },
+        });
     }
     static async update(id, data) {
-        return { id, data };
+        const exists = await this.findById(id);
+        if (!exists)
+            return null;
+        return prisma.usuario.update({
+            where: { id: Number(id) },
+            data: {
+                nome: data.name,
+                email: data.email,
+            },
+        });
     }
     static async delete(id) {
-        return;
+        const exists = await this.findById(id);
+        if (!exists)
+            return false;
+        await prisma.usuario.update({
+            where: { id: Number(id) },
+            data: { deletedAt: new Date() },
+        });
+        return true;
     }
 }

@@ -17,6 +17,7 @@ export const swaggerSpec = swaggerJsdoc({
                     type: 'http',
                     scheme: 'bearer',
                     bearerFormat: 'JWT',
+                    description: 'Informe o token no formato: Bearer {seu_token}',
                 },
             },
         },

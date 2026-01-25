@@ -6,13 +6,14 @@ import { createGestorSchema } from '../dtos/gestor.dtos.js';
 const router = Router();
 const controller = new gestorController();
 /**
- * @openapi
+ * @swagger
  * /gestores:
  *   post:
  *     summary: Criar Gestores
  *     tags:
- *       - Gestores
- *
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -43,8 +44,90 @@ const controller = new gestorController();
  *         description: Erro de validação
  */
 router.post('/', validateDto(createGestorSchema), controller.create);
+/**
+ * @swagger
+ * /gestores:
+ *   get:
+ *     summary: Listar gestores
+ *     tags:
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de gestores
+ *       401:
+ *        description: Não autorizado
+ *       400:
+ *        description: Erro de validação
+ *       404:
+ *        description: Gestor não encontrado
+ */
 router.get('/', authMiddleware, controller.findAll);
+/**
+ * @swagger
+ * /gestores/{id}:
+ *   get:
+ *     summary: Buscar gestor por ID
+ *     tags:
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Gestor encontrado
+ *       404:
+ *        description: Gestor não encontrado
+ */
 router.get('/:id', authMiddleware, controller.findById);
+/**
+ * @swagger
+ * /gestores/{id}:
+ *   put:
+ *     summary: Atualizar gestor
+ *     tags:
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Gestor atualizado
+ *       404:
+ *         description: Gestor não encontrado
+ */
 router.put('/:id', authMiddleware, controller.update);
+/**
+ * @swagger
+ * /gestores/{id}:
+ *   delete:
+ *     summary: Remover gestor
+ *     tags:
+ *       - [Gestores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Gestor removido
+ *       404:
+ *         description: Gestor não encontrado
+ */
 router.delete('/:id', authMiddleware, controller.delete);
 export { router as gestorRoutes };

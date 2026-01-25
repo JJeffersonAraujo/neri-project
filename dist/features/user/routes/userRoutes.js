@@ -3,13 +3,13 @@ import { Router } from 'express';
 import { adminRoutes } from '../../Admin/routes/admin.routes.js';
 import { clienteRoutes } from '../../cliente/routes/cliente.routes.js';
 import { gestorRoutes } from '../../gestor/routes/gestor.routes.js';
-import { profissionalSaudeRoutes } from '../../profissionalSaude/routes/profissionalSaude.routes.js';
+import { profissionalRoutes } from '../../profissionalSaude/routes/profissionalSaude.routes.js';
 const routes = Router();
 /*routes.use('/auth', authRoutes)*/
 routes.use('/admins', adminRoutes);
 routes.use('/clientes', clienteRoutes);
 routes.use('/gestores', gestorRoutes);
-routes.use('/profsaude', profissionalSaudeRoutes);
+routes.use('/profsaude', profissionalRoutes);
 export { routes };
 /*import { Router } from 'express'
 import { UserController } from '../controllers/userControllers.js'

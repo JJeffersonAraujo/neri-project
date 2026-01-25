@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { jwtConfig } from '../utils/jwt.util.js'
 
+
 interface TokenPayload {
   id: number
 }

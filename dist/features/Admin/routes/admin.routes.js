@@ -1,18 +1,19 @@
 import { Router } from 'express';
-import { AdminController } from '../controllers/admin.controllers.js';
+import { AdminController } from '../controllers/admin.controller.js';
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js';
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js';
 import { createAdminSchema } from '../dtos/admin.dtos.js';
 const router = Router();
 const controller = new AdminController();
 /**
- * @openapi
+ * @swagger
  * /admins:
  *   post:
  *     summary: Criar administrador
  *     tags:
- *       - Administrador
- *
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -43,8 +44,90 @@ const controller = new AdminController();
  *         description: Erro de validação
  */
 router.post('/', validateDto(createAdminSchema), controller.create);
+/**
+ * @swagger
+ * /admins:
+ *   get:
+ *     summary: Listar administradores
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de administradores
+ *       401:
+ *        description: Não autorizado
+ *       400:
+ *        description: Erro de validação
+ *       404:
+ *        description: Administrador não encontrado
+ */
 router.get('/', authMiddleware, controller.findAll);
+/**
+ * @swagger
+ * /admins/{id}:
+ *   get:
+ *     summary: Buscar administrador por ID
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Administrador encontrado
+ *       404:
+ *        description: Administrador não encontrado
+ */
 router.get('/:id', authMiddleware, controller.findById);
+/**
+ * @swagger
+ * /admins/{id}:
+ *   put:
+ *     summary: Atualizar administrador
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Administrador atualizado
+ *       404:
+ *         description: Administrador não encontrado
+ */
 router.put('/:id', authMiddleware, controller.update);
+/**
+ * @swagger
+ * /admins/{id}:
+ *   delete:
+ *     summary: Remover administrador
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Administrador removido
+ *       404:
+ *         description: Administrador não encontrado
+ */
 router.delete('/:id', authMiddleware, controller.delete);
 export { router as adminRoutes };

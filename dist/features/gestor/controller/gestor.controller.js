@@ -8,13 +8,24 @@ export class gestorController {
         return res.json(await gestorService.findAll());
     }
     async findById(req, res) {
-        return res.json(await gestorService.findById(req.params.id));
+        const gestor = await gestorService.findById(req.params.id);
+        if (!gestor) {
+            return res.status(404).json({ message: 'Gestor não encontrado' });
+        }
+        return res.json(gestor);
     }
     async update(req, res) {
-        return res.json(await gestorService.update(req.params.id, req.body));
+        const gestor = await gestorService.update(req.params.id, req.body);
+        if (!gestor) {
+            return res.status(404).json({ message: 'Gestor não encontrado' });
+        }
+        return res.json({ message: 'Gestor atualizado', data: gestor });
     }
     async delete(req, res) {
-        await gestorService.delete(req.params.id);
+        const deleted = await gestorService.delete(req.params.id);
+        if (!deleted) {
+            return res.status(404).json({ message: 'Gestor não encontrado' });
+        }
         return res.status(204).send();
     }
 }

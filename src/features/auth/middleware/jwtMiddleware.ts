@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { jwtConfig } from '../../../shared/utils/jwt.util.js'
-import '../../../shared/types/express.types.js'
 
 interface CustomJwtPayload extends JwtPayload {
-  sub: string 
-  role: string
+  sub: string
+  role: 'ADMIN' | 'GESTOR' | 'CLIENTE' | 'PROFISSIONAL'
 }
 
 export function authMiddleware(
@@ -25,7 +24,7 @@ export function authMiddleware(
     const decoded = jwt.verify(token, jwtConfig.secret) as CustomJwtPayload
 
     req.user = {
-      id: decoded.sub.toString(),
+      id: decoded.sub,
       role: decoded.role,
     }
 

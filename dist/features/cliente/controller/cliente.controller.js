@@ -8,13 +8,24 @@ export class ClienteController {
         return res.json(await clienteService.findAll());
     }
     async findById(req, res) {
-        return res.json(await clienteService.findById(req.params.id));
+        const cliente = await clienteService.findById(req.params.id);
+        if (!cliente) {
+            return res.status(404).json({ message: 'Cliente não encontrado' });
+        }
+        return res.json(cliente);
     }
     async update(req, res) {
-        return res.json(await clienteService.update(req.params.id, req.body));
+        const cliente = await clienteService.update(req.params.id, req.body);
+        if (!cliente) {
+            return res.status(404).json({ message: 'Cliente não encontrado' });
+        }
+        return res.json({ message: 'Cliente atualizado', data: cliente });
     }
     async delete(req, res) {
-        await clienteService.delete(req.params.id);
+        const deleted = await clienteService.delete(req.params.id);
+        if (!deleted) {
+            return res.status(404).json({ message: 'Cliente não encontrado' });
+        }
         return res.status(204).send();
     }
 }

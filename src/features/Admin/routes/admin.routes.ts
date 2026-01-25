@@ -1,11 +1,9 @@
 import { Router } from 'express'
 import { AdminController } from '../controllers/admin.controller.js'
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
+import { authorize } from '@/shared/middleware/authorize.middleware.js'
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createAdminSchema } from '../dtos/admin.dtos.js'
-
-import { devAuthMiddleware } from '../../../shared/middleware/devAuth.middleware.js'
-
 
 const router = Router()
 const controller = new AdminController()
@@ -49,7 +47,8 @@ const controller = new AdminController()
  *         description: Erro de validação
  */
 router.post(
-  '/',
+  '/',authMiddleware,
+  authorize('ADMIN', 'GESTOR'),
   validateDto(createAdminSchema),
   controller.create
 )
@@ -73,8 +72,7 @@ router.post(
  *       404:
  *        description: Administrador não encontrado
  */
-router.get('/', devAuthMiddleware, controller.findAll)
-/*router.get('/', authMiddleware, controller.findAll)*/
+router.get('/', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.findAll)
 
 /**
  * @swagger
@@ -97,8 +95,8 @@ router.get('/', devAuthMiddleware, controller.findAll)
  *       404:
  *        description: Administrador não encontrado
  */
-router.get('/:id', devAuthMiddleware, controller.findById)
-/*router.get('/:id', authMiddleware, controller.findById)*/
+
+router.get('/:id', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.findById)
 
 /**
  * @swagger
@@ -121,8 +119,7 @@ router.get('/:id', devAuthMiddleware, controller.findById)
  *       404:
  *         description: Administrador não encontrado
  */
-router.put('/:id', devAuthMiddleware, controller.update)
-/*router.put('/:id', authMiddleware, controller.update)*/
+router.put('/:id', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.update)
 
 /**
  * @swagger
@@ -145,7 +142,6 @@ router.put('/:id', devAuthMiddleware, controller.update)
  *       404:
  *         description: Administrador não encontrado
  */
-router.delete('/:id', devAuthMiddleware, controller.delete)
-/*router.delete('/:id', authMiddleware, controller.delete)*/
+router.delete('/:id', authMiddleware, authorize('ADMIN'), controller.delete)
 
 export { router as adminRoutes }

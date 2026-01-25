@@ -9,8 +9,11 @@ export function authMiddleware(req, res, next) {
     const [, token] = authHeader.split(' ');
     try {
         const decoded = jwt.verify(token, jwtConfig.secret);
-        req.user = decoded;
-        next();
+        req.user = {
+            id: decoded.sub,
+            role: decoded.role,
+        };
+        return next();
     }
     catch {
         return res.status(401).json({ message: 'Token inválido' });

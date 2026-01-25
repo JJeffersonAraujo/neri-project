@@ -1,10 +1,9 @@
 import { Router } from 'express'
 import { ClienteController } from '../controller/cliente.controller.js'
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
+import { authorize } from '@/shared/middleware/authorize.middleware.js'
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createClienteSchema } from '../dtos/cliente.dtos.js'
-
-import { devAuthMiddleware } from '../../../shared/middleware/devAuth.middleware.js'
 
 const router = Router()
 const controller = new ClienteController()
@@ -48,7 +47,8 @@ const controller = new ClienteController()
  *         description: Erro de validação
  */
 router.post(
-  '/',
+  '/',authMiddleware,
+  authorize('CLIENTE'),
   validateDto(createClienteSchema),
   controller.create
 )
@@ -72,8 +72,7 @@ router.post(
  *       404:
  *        description: Cliente não encontrado
  */
-router.get('/', devAuthMiddleware, controller.findAll)
-/*router.get('/', authMiddleware, controller.findAll)*/
+router.get('/', authMiddleware, authorize('CLIENTE'), controller.findAll)
 
 /**
  * @swagger
@@ -96,8 +95,7 @@ router.get('/', devAuthMiddleware, controller.findAll)
  *       404:
  *        description: Cliente não encontrado
  */
-router.get('/:id', devAuthMiddleware, controller.findById)
-/*router.get('/:id', authMiddleware, controller.findById)*/
+router.get('/:id', authMiddleware, authorize('CLIENTE'), controller.findById)
 
 /**
  * @swagger
@@ -120,8 +118,7 @@ router.get('/:id', devAuthMiddleware, controller.findById)
  *       404:
  *         description: Cliente não encontrado
  */
-router.put('/:id', devAuthMiddleware, controller.update)
-/*router.put('/:id', authMiddleware, controller.update)*/
+router.put('/:id', authMiddleware, authorize('CLIENTE'), controller.update)
 
 /**
  * @swagger
@@ -144,7 +141,6 @@ router.put('/:id', devAuthMiddleware, controller.update)
  *       404:
  *         description: Cliente não encontrado
  */
-router.delete('/:id', devAuthMiddleware, controller.delete)
-/*router.delete('/:id', authMiddleware, controller.delete)*/
+router.delete('/:id', authMiddleware, authorize('ADMIN'), controller.delete)
 
 export { router as clienteRoutes }

@@ -14,10 +14,11 @@ export const swaggerSpec = swaggerJsdoc({
     ],
     components: {
       securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
+      bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      description: 'Informe o token no formato: Bearer {seu_token}',
         },
       },
     },
