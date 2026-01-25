@@ -1,12 +1,15 @@
 import express from 'express'
+import type { Express } from 'express'
 import swaggerUi from 'swagger-ui-express'
-import { swaggerSpec } from './config/swagger.js'
+import fs from 'fs'
+import path from 'path'
 
-import { userRoutes } from './features/user/routes/userRoutes.js'
-import { authRoutes } from './features/auth/routes/authRoutes.js'
-import { jornadaRoutes } from './features/jornada/routes/jornadaRoutes.js'
+// ==========================
+// Rotas TSOA
+// ==========================
+import { RegisterRoutes } from './routes/routes.js'
 
-const app = express()
+const app: Express = express()
 
 // ==========================
 // Middlewares globais
@@ -20,24 +23,34 @@ app.get('/', (_req, res) => {
   return res.status(200).json({
     status: 'OK',
     message: 'Neri Project API está rodando 🚀',
-    docs: '/docs'
+    docs: '/docs',
   })
 })
 
-app.get('/health', (_req, res) => {
-  return res.status(200).send('OK')
-})
+app.get('/health', (_req, res) => res.status(200).send('OK'))
 
 // ==========================
-// Rotas da aplicação
+// Registrar rotas TSOA
 // ==========================
-app.use('/api/auth', authRoutes)   // /api/auth/login
-app.use('/api', userRoutes)        // /api/users
-app.use('/api/jornada', jornadaRoutes)
+// ⚠️ basePath do tsoa.json = /api
+app.use('/api', (req, res, next) => {
+  RegisterRoutes(req.app)
+  next()
+})
 
 // ==========================
 // Swagger
 // ==========================
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+const swaggerPath = path.resolve(
+  process.cwd(),
+  'src/config/swagger/swagger.json'
+)
+
+if (fs.existsSync(swaggerPath)) {
+  const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, 'utf-8'))
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+} else {
+  console.warn('⚠ Swagger não encontrado em src/config/swagger/swagger.json')
+}
 
 export { app }

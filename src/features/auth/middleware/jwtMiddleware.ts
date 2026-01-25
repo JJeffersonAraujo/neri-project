@@ -1,26 +1,28 @@
-import { Request, Response, NextFunction } from 'express'
-import jwt, { JwtPayload } from 'jsonwebtoken'
-import { jwtConfig } from '../../../shared/utils/jwt.util'
-import '../../../shared/types/express.types'
+import type { Request } from "express";
+import jwt from "jsonwebtoken";
+import { jwtConfig } from "../../../config/jwt.js";
+import type { AuthenticatedUser } from "../types/auth.types.js";
 
-export function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const authHeader = req.headers.authorization
-
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Token não informado' })
+export async function expressAuthentication(
+  request: Request,
+  securityName: string
+): Promise<AuthenticatedUser> {
+  if (securityName !== "jwt") {
+    throw new Error("Security inválida");
   }
 
-  const [, token] = authHeader.split(' ')
+  const authHeader = request.headers.authorization;
+
+  if (!authHeader) {
+    throw new Error("Token não informado");
+  }
+
+  const [, token] = authHeader.split(" ");
 
   try {
-    const decoded = jwt.verify(token, jwtConfig.secret) as JwtPayload
-    req.user = decoded
-    next()
+    const decoded = jwt.verify(token, jwtConfig.secret) as AuthenticatedUser;
+    return decoded;
   } catch {
-    return res.status(401).json({ message: 'Token inválido' })
+    throw new Error("Token inválido");
   }
 }

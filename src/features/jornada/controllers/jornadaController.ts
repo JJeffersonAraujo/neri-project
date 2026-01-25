@@ -1,84 +1,96 @@
 // src/features/jornada/controllers/jornadaController.ts
-import { Request, Response } from 'express'
-import { JornadaService } from '../services/jornadaService.js'
-import { registrarExecucaoDTO } from '../../jornada/dtos/registrarExecucaoDTO.js'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Path,
+  Post,
+  Put,
+  Response,
+  Route,
+  Security,
+  SuccessResponse,
+  Tags
+} from 'tsoa'
 
-export class JornadaController {
-  private jornadaService: JornadaService
+import { JornadaService } from '../services/jornadaService.js'
+import type { RegistrarExecucaoDTO } from '../dtos/registrarExecucaoDTO.js'
+import type { UpdateExecucaoDTO } from '../dtos/updateExecucaoDTO.js'
+
+
+@Route('jornadas')
+@Tags('Jornada')
+@Security('bearerAuth')
+export class JornadaController extends Controller {
+  private readonly jornadaService: JornadaService
 
   constructor() {
+    super()
     this.jornadaService = new JornadaService()
   }
 
-  // Registrar execução de jornada
-  async registrar(req: Request, res: Response): Promise<Response> {
-    try {
-      const parseResult = registrarExecucaoDTO.safeParse(req.body)
-      if (!parseResult.success) {
-        return res.status(400).json({
-          message: 'Dados obrigatórios não informados',
-          errors: parseResult.error.format() // Corrigido para Zod
-        })
-      }
-
-      const resultado = await this.jornadaService.registrarExecucao(parseResult.data)
-      return res.status(201).json(resultado)
-    } catch (error: any) {
-      return res.status(400).json({ message: error.message })
-    }
+  // ==========================
+  // Registrar execução
+  // ==========================
+  @SuccessResponse('201', 'Jornada registrada com sucesso')
+  @Response('400', 'Dados inválidos')
+  @Post()
+  public async registrar(
+    @Body() body: RegistrarExecucaoDTO
+  ) {
+    return this.jornadaService.registrarExecucao(body)
   }
 
+  // ==========================
   // Listar todas as jornadas
-  async listarTodas(req: Request, res: Response): Promise<Response> {
-    try {
-      const jornadas = await this.jornadaService.listarTodas()
-      return res.status(200).json(jornadas)
-    } catch (error: any) {
-      return res.status(400).json({ message: error.message })
-    }
+  // ==========================
+  @Get()
+  public async listarTodas() {
+    return this.jornadaService.listarTodas()
   }
 
+  // ==========================
   // Buscar jornada por ID
-  async buscarPorId(req: Request, res: Response): Promise<Response> {
-    try {
-      const id = Number(req.params.id)
-      const jornada = await this.jornadaService.buscarPorId(id)
-      if (!jornada) return res.status(404).json({ message: 'Jornada não encontrada' })
-      return res.status(200).json(jornada)
-    } catch (error: any) {
-      return res.status(400).json({ message: error.message })
+  // ==========================
+  @Response('404', 'Jornada não encontrada')
+  @Get('{id}')
+  public async buscarPorId(
+    @Path() id: number
+  ) {
+    const jornada = await this.jornadaService.buscarPorId(id)
+
+    if (!jornada) {
+      this.setStatus(404)
+      return
     }
+
+    return jornada
   }
 
+  // ==========================
   // Atualizar jornada
-  async atualizar(req: Request, res: Response): Promise<Response> {
-    try {
-      const id = Number(req.params.id)
-      const { inicioExecutado, fimExecutado } = req.body
-
-      if (!inicioExecutado || !fimExecutado) {
-        return res.status(400).json({ message: 'Dados obrigatórios não informados' })
-      }
-
-      const jornadaAtualizada = await this.jornadaService.atualizar(id, {
-        inicioExecutado: new Date(inicioExecutado),
-        fimExecutado: new Date(fimExecutado)
-      })
-
-      return res.status(200).json(jornadaAtualizada)
-    } catch (error: any) {
-      return res.status(400).json({ message: error.message })
-    }
+  // ==========================
+  @Response('400', 'Dados inválidos')
+  @Put('{id}')
+  public async atualizar(
+    @Path() id: number,
+    @Body() body: UpdateExecucaoDTO
+  ) {
+    return this.jornadaService.atualizar(id, {
+      inicioExecutado: new Date(body.inicioExecutado),
+      fimExecutado: new Date(body.fimExecutado),
+    })
   }
 
+  // ==========================
   // Deletar jornada
-  async deletar(req: Request, res: Response): Promise<Response> {
-    try {
-      const id = Number(req.params.id)
-      await this.jornadaService.deletar(id)
-      return res.status(204).send()
-    } catch (error: any) {
-      return res.status(400).json({ message: error.message })
-    }
+  // ==========================
+  @SuccessResponse('204', 'Jornada removida')
+  @Delete('{id}')
+  public async deletar(
+    @Path() id: number
+  ): Promise<void> {
+    await this.jornadaService.deletar(id)
   }
 }

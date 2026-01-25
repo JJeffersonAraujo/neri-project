@@ -1,24 +1,60 @@
 {
   "compilerOptions": {
+    /* =========================
+     * Ambiente / Runtime
+     * ========================= */
     "target": "ES2022",
+    "lib": ["ES2022"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "typeRoots": ["./src/@types", "./node_modules/@types"],
 
-    "rootDir": "./src",
-    "outDir": "./dist",
+    /* =========================
+     * ESM / JSON
+     * ========================= */
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
 
+    /* =========================
+     * Paths / Aliases
+     * ========================= */
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"]
     },
 
-    "experimentalDecorators": true,
+    /* =========================
+     * Output
+     * ========================= */
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "sourceMap": true,
 
-    "esModuleInterop": true,
+    /* =========================
+     * Decorators (TSOA)
+     * ========================= */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    /* =========================
+     * Type Safety
+     * ========================= */
     "strict": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+
+    /* =========================
+     * Interop
+     * ========================= */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* =========================
+     * Types
+     * ========================= */
+    "types": ["node", "express"],
+    "typeRoots": ["./src/@types", "./node_modules/@types"]
   },
-  "include": ["src"]
+
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

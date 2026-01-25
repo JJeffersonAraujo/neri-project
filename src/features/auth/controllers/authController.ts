@@ -1,21 +1,41 @@
-import { Request, Response } from 'express'
-import { AuthService } from '../services/authService.js'
+import { Body, Controller, Post, Route, SuccessResponse, Response, Example } from "tsoa";
+import { AuthService } from "../services/authService.js";
+import type { LoginDTO } from "../dtos/loginDTO.js";
+import { Tags } from 'tsoa';
 
-export class AuthController {
-  private authService = new AuthService()
+interface AuthResponse {
+  token: string;
+  refreshToken: string;
+  user: {
+    id: number;
+    nome: string;
+    email: string;
+    role: string;
+  };
+}
 
-  async login(req: Request, res: Response) {
-    try {
-      const { email, senha } = req.body
+@Tags("Autenticação")
+@Route("auth")
+export class AuthController extends Controller {
+  private authService = new AuthService();
 
-      const result = await this.authService.login({
-        email,
-        password: senha,
-      })
-
-      return res.json(result)
-    } catch (error: any) {
-      return res.status(401).json({ message: error.message })
+  @SuccessResponse("200", "Login realizado com sucesso")
+  @Response<Error>("401", "Credenciais inválidas")
+  @Post("login")
+  @Example<AuthResponse>({
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    user: {
+      id: 1,
+      nome: "Jefferson",
+      email: "admin@email.com",
+      role: "ADMIN"
     }
+  })
+  public async login(@Body() body: LoginDTO): Promise<AuthResponse> {
+    return this.authService.login({
+      email: body.email,
+      password: body.senha
+    });
   }
 }

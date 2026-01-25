@@ -1,51 +1,78 @@
-import { Request, Response } from 'express'
-import { UserService } from '../services/userServices.js'
-import { Role } from '@prisma/client'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Path,
+  Post,
+  Put,
+  Response,
+  Route,
+  Security,
+  SuccessResponse,
+  Tags
+} from "tsoa";
 
-export class UserController {
-  private userService = new UserService()
+import { UserService } from "../services/userServices.js";
+import type { CreateUserDTO } from "../dtos/createUserDTO.js";
+import type { UpdateUserDTO } from "../dtos/updateUserDTO.js";
 
-  async create(req: Request, res: Response) {
-    try {
-      const { nome, email, senha, role } = req.body
+@Route("users")
+@Tags("Usuário")
+@Security("bearerAuth")
+export class UserController extends Controller {
+  private readonly userService = new UserService();
 
-      if (role && !Object.values(Role).includes(role)) {
-        return res.status(400).json({ message: 'Role inválida' })
-      }
-
-      const user = await this.userService.create({
-        nome,
-        email,
-        senha,
-        role,
-      })
-
-      return res.status(201).json(user)
-    } catch (error: any) {
-      return res.status(400).json({ message: error.message })
-    }
+  // ==========================
+  // Criar usuário
+  // ==========================
+  @SuccessResponse("201", "Usuário criado com sucesso")
+  @Response("400", "Dados inválidos")
+  @Post()
+  public async create(
+    @Body() body: CreateUserDTO
+  ): Promise<unknown> {
+    return this.userService.create(body);
   }
 
-  async findAll(req: Request, res: Response) {
-    const users = await this.userService.findAll()
-    return res.json(users)
+  // ==========================
+  // Listar usuários
+  // ==========================
+  @Get()
+  public async findAll(): Promise<unknown[]> {
+    return this.userService.findAll();
   }
 
-  async findById(req: Request, res: Response) {
-    const user = await this.userService.findById(Number(req.params.id))
-    return res.json(user)
+  // ==========================
+  // Buscar por ID
+  // ==========================
+  @Response("404", "Usuário não encontrado")
+  @Get("{id}")
+  public async findById(
+    @Path() id: number
+  ): Promise<unknown> {
+    return this.userService.findById(id);
   }
 
-  async update(req: Request, res: Response) {
-    const user = await this.userService.update(
-      Number(req.params.id),
-      req.body
-    )
-    return res.json(user)
+  // ==========================
+  // Atualizar
+  // ==========================
+  @Put("{id}")
+  public async update(
+    @Path() id: number,
+    @Body() body: UpdateUserDTO
+  ): Promise<unknown> {
+    return this.userService.update(id, body);
   }
 
-  async delete(req: Request, res: Response) {
-    await this.userService.delete(Number(req.params.id))
-    return res.status(204).send()
+  // ==========================
+  // Remover
+  // ==========================
+  @SuccessResponse("204", "Usuário removido")
+  @Delete("{id}")
+  public async delete(
+    @Path() id: number
+  ): Promise<void> {
+    await this.userService.delete(id);
   }
 }

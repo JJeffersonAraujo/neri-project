@@ -1,0 +1,879 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"CreateUserDTO": {
+				"properties": {
+					"nome": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"senha": {
+						"type": "string"
+					},
+					"role": {
+						"type": "string",
+						"enum": [
+							"ADMIN",
+							"GESTOR",
+							"PROFISSIONAL",
+							"USER"
+						]
+					}
+				},
+				"required": [
+					"nome",
+					"email",
+					"senha",
+					"role"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"UpdateUserDTO": {
+				"properties": {
+					"nome": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"senha": {
+						"type": "string"
+					},
+					"role": {
+						"type": "string",
+						"enum": [
+							"ADMIN",
+							"GESTOR",
+							"PROFISSIONAL",
+							"USER"
+						]
+					}
+				},
+				"type": "object",
+				"additionalProperties": true
+			},
+			"RegistrarExecucaoDTO": {
+				"properties": {
+					"fimExecutado": {
+						"type": "string"
+					},
+					"inicioExecutado": {
+						"type": "string"
+					},
+					"escalaId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"fimExecutado",
+					"inicioExecutado",
+					"escalaId"
+				],
+				"type": "object"
+			},
+			"UpdateExecucaoDTO": {
+				"properties": {
+					"inicioExecutado": {
+						"type": "string"
+					},
+					"fimExecutado": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"inicioExecutado",
+					"fimExecutado"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"AuthResponse": {
+				"properties": {
+					"token": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					},
+					"user": {
+						"properties": {
+							"role": {
+								"type": "string"
+							},
+							"email": {
+								"type": "string"
+							},
+							"nome": {
+								"type": "string"
+							},
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"role",
+							"email",
+							"nome",
+							"id"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"token",
+					"refreshToken",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"Error": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"LoginDTO": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"senha": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"senha"
+				],
+				"type": "object",
+				"additionalProperties": true
+			}
+		},
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "swagger",
+		"version": "1.0.0",
+		"description": "Projeto NeriCare - Express + TypeScript com TSOA",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {
+			"name": "Jefferson Araujo"
+		}
+	},
+	"paths": {
+		"/users": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"201": {
+						"description": "Usuário criado com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"400": {
+						"description": "Dados inválidos"
+					}
+				},
+				"tags": [
+					"Usuário"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserDTO"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "FindAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Usuário"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/users/{id}": {
+			"get": {
+				"operationId": "FindById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"404": {
+						"description": "Usuário não encontrado"
+					}
+				},
+				"tags": [
+					"Usuário"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Usuário"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserDTO"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "Usuário removido"
+					}
+				},
+				"tags": [
+					"Usuário"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/jornadas": {
+			"post": {
+				"operationId": "Registrar",
+				"responses": {
+					"201": {
+						"description": "Jornada registrada com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"jornadaCalculada": {
+											"properties": {
+												"minutosNoturnos": {
+													"type": "number",
+													"format": "double"
+												},
+												"minutosExtras": {
+													"type": "number",
+													"format": "double"
+												},
+												"minutosAtraso": {
+													"type": "number",
+													"format": "double"
+												},
+												"minutosTrabalhados": {
+													"type": "number",
+													"format": "double"
+												},
+												"escalaId": {
+													"type": "number",
+													"format": "double"
+												},
+												"id": {
+													"type": "number",
+													"format": "double"
+												},
+												"createdAt": {
+													"type": "string",
+													"format": "date-time"
+												}
+											},
+											"required": [
+												"minutosNoturnos",
+												"minutosExtras",
+												"minutosAtraso",
+												"minutosTrabalhados",
+												"escalaId",
+												"id",
+												"createdAt"
+											],
+											"type": "object"
+										},
+										"jornadaExecutada": {
+											"properties": {
+												"escalaId": {
+													"type": "number",
+													"format": "double"
+												},
+												"id": {
+													"type": "number",
+													"format": "double"
+												},
+												"createdAt": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"fimExecutado": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"inicioExecutado": {
+													"type": "string",
+													"format": "date-time"
+												}
+											},
+											"required": [
+												"escalaId",
+												"id",
+												"createdAt",
+												"fimExecutado",
+												"inicioExecutado"
+											],
+											"type": "object"
+										}
+									},
+									"required": [
+										"jornadaCalculada",
+										"jornadaExecutada"
+									],
+									"type": "object"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Dados inválidos"
+					}
+				},
+				"tags": [
+					"Jornada"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegistrarExecucaoDTO"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "ListarTodas",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"allOf": [
+											{
+												"properties": {
+													"escala": {
+														"properties": {
+															"deletedAt": {
+																"type": "string",
+																"format": "date-time"
+															},
+															"updatedAt": {
+																"type": "string",
+																"format": "date-time"
+															},
+															"dataFim": {
+																"type": "string",
+																"format": "date-time"
+															},
+															"dataInicio": {
+																"type": "string",
+																"format": "date-time"
+															},
+															"nome": {
+																"type": "string"
+															},
+															"id": {
+																"type": "number",
+																"format": "double"
+															},
+															"createdAt": {
+																"type": "string",
+																"format": "date-time"
+															}
+														},
+														"required": [
+															"deletedAt",
+															"updatedAt",
+															"dataFim",
+															"dataInicio",
+															"nome",
+															"id",
+															"createdAt"
+														],
+														"type": "object"
+													}
+												},
+												"required": [
+													"escala"
+												],
+												"type": "object"
+											},
+											{
+												"properties": {
+													"escalaId": {
+														"type": "number",
+														"format": "double"
+													},
+													"id": {
+														"type": "number",
+														"format": "double"
+													},
+													"createdAt": {
+														"type": "string",
+														"format": "date-time"
+													},
+													"fimExecutado": {
+														"type": "string",
+														"format": "date-time"
+													},
+													"inicioExecutado": {
+														"type": "string",
+														"format": "date-time"
+													}
+												},
+												"required": [
+													"escalaId",
+													"id",
+													"createdAt",
+													"fimExecutado",
+													"inicioExecutado"
+												],
+												"type": "object"
+											}
+										]
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Jornada"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/jornadas/{id}": {
+			"get": {
+				"operationId": "BuscarPorId",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"properties": {
+												"escala": {
+													"properties": {
+														"deletedAt": {
+															"type": "string",
+															"format": "date-time"
+														},
+														"updatedAt": {
+															"type": "string",
+															"format": "date-time"
+														},
+														"dataFim": {
+															"type": "string",
+															"format": "date-time"
+														},
+														"dataInicio": {
+															"type": "string",
+															"format": "date-time"
+														},
+														"nome": {
+															"type": "string"
+														},
+														"id": {
+															"type": "number",
+															"format": "double"
+														},
+														"createdAt": {
+															"type": "string",
+															"format": "date-time"
+														}
+													},
+													"required": [
+														"deletedAt",
+														"updatedAt",
+														"dataFim",
+														"dataInicio",
+														"nome",
+														"id",
+														"createdAt"
+													],
+													"type": "object"
+												}
+											},
+											"required": [
+												"escala"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"escalaId": {
+													"type": "number",
+													"format": "double"
+												},
+												"id": {
+													"type": "number",
+													"format": "double"
+												},
+												"createdAt": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"fimExecutado": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"inicioExecutado": {
+													"type": "string",
+													"format": "date-time"
+												}
+											},
+											"required": [
+												"escalaId",
+												"id",
+												"createdAt",
+												"fimExecutado",
+												"inicioExecutado"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Jornada não encontrada"
+					}
+				},
+				"tags": [
+					"Jornada"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Atualizar",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"escalaId": {
+											"type": "number",
+											"format": "double"
+										},
+										"id": {
+											"type": "number",
+											"format": "double"
+										},
+										"createdAt": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"fimExecutado": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"inicioExecutado": {
+											"type": "string",
+											"format": "date-time"
+										}
+									},
+									"required": [
+										"escalaId",
+										"id",
+										"createdAt",
+										"fimExecutado",
+										"inicioExecutado"
+									],
+									"type": "object"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Dados inválidos"
+					}
+				},
+				"tags": [
+					"Jornada"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateExecucaoDTO"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Deletar",
+				"responses": {
+					"204": {
+						"description": "Jornada removida"
+					}
+				},
+				"tags": [
+					"Jornada"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Login realizado com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+											"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+											"user": {
+												"id": 1,
+												"nome": "Jefferson",
+												"email": "admin@email.com",
+												"role": "ADMIN"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Credenciais inválidas",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Autenticação"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginDTO"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api"
+		}
+	]
+}
