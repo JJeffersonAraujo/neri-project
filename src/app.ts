@@ -4,6 +4,11 @@ import fs from 'fs'
 import path from 'path'
 import cors from 'cors'
 
+
+import { authRoutes } from './features/auth/routes/authRoutes.js'
+import { routes as userRoutes } from './features/../routes/user.routes.js'
+
+
 // ==========================
 // Rotas TSOA
 // ==========================
@@ -29,6 +34,10 @@ app.get('/', (_req, res) => {
 })
 
 app.get('/health', (_req, res) => res.status(200).send('OK'))
+
+app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
+
 
 // ==========================
 // Registrar rotas TSOA

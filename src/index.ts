@@ -8,6 +8,9 @@ import path from 'path'
 import { RegisterRoutes } from './routes/routes'
 import { env } from './config/env' // 👈 IMPORTANTE
 
+import 'dotenv/config'
+
+
 const app = express()
 
 // ==========================
@@ -55,3 +58,5 @@ app.get('/health', (_req, res) => {
 app.listen(env.PORT, () => {
   console.log(`🚀 API rodando em http://localhost:${env.PORT}`)
 })
+
+

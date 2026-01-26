@@ -1,0 +1,147 @@
+import { Router } from 'express'
+import { AdminController } from '../controllers/admin.controller.js'
+import { authMiddleware } from '../../../shared/middleware/jwtMiddleware.js'
+import { authorize } from '@/shared/middleware/authorize.middleware.js'
+import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
+import { createAdminSchema } from '../dtos/admin.dtos.js'
+
+const router = Router()
+const controller = new AdminController()
+
+/**
+ * @swagger
+ * /admins:
+ *   post:
+ *     summary: Criar administrador
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 minLength: 3
+ *                 example: João Silva
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: admin@email.com
+ *               password:
+ *                 type: string
+ *                 minLength: 6
+ *                 example: 123456
+ *     responses:
+ *       201:
+ *         description: Administrador criado com sucesso
+ *       400:
+ *         description: Erro de validação
+ */
+router.post(
+  '/',authMiddleware,
+  authorize('ADMIN', 'GESTOR'),
+  validateDto(createAdminSchema),
+  controller.create
+)
+
+/**
+ * @swagger
+ * /admins:
+ *   get:
+ *     summary: Listar administradores
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de administradores
+ *       401:
+ *        description: Não autorizado
+ *       400:
+ *        description: Erro de validação
+ *       404:
+ *        description: Administrador não encontrado
+ */
+router.get('/', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.findAll)
+
+/**
+ * @swagger
+ * /admins/{id}:
+ *   get:
+ *     summary: Buscar administrador por ID
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Administrador encontrado
+ *       404:
+ *        description: Administrador não encontrado
+ */
+
+router.get('/:id', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.findById)
+
+/**
+ * @swagger
+ * /admins/{id}:
+ *   put:
+ *     summary: Atualizar administrador
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Administrador atualizado
+ *       404:
+ *         description: Administrador não encontrado
+ */
+router.put('/:id', authMiddleware, authorize('ADMIN', 'GESTOR'), controller.update)
+
+/**
+ * @swagger
+ * /admins/{id}:
+ *   delete:
+ *     summary: Remover administrador
+ *     tags:
+ *       - [Administrador]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Administrador removido
+ *       404:
+ *         description: Administrador não encontrado
+ */
+router.delete('/:id', authMiddleware, authorize('ADMIN'), controller.delete)
+
+export { router as adminRoutes }
