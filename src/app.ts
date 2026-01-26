@@ -1,19 +1,20 @@
-import express from 'express'
-import type { Express } from 'express'
+import express, { type Express } from 'express'
 import swaggerUi from 'swagger-ui-express'
 import fs from 'fs'
 import path from 'path'
+import cors from 'cors'
 
 // ==========================
 // Rotas TSOA
 // ==========================
-import { RegisterRoutes } from './routes/routes.js'
+import { RegisterRoutes } from './routes/routes'
 
 const app: Express = express()
 
 // ==========================
 // Middlewares globais
 // ==========================
+app.use(cors())
 app.use(express.json())
 
 // ==========================
@@ -23,7 +24,7 @@ app.get('/', (_req, res) => {
   return res.status(200).json({
     status: 'OK',
     message: 'Neri Project API está rodando 🚀',
-    docs: '/docs',
+    docs: '/docs'
   })
 })
 
@@ -32,11 +33,7 @@ app.get('/health', (_req, res) => res.status(200).send('OK'))
 // ==========================
 // Registrar rotas TSOA
 // ==========================
-// ⚠️ basePath do tsoa.json = /api
-app.use('/api', (req, res, next) => {
-  RegisterRoutes(req.app)
-  next()
-})
+RegisterRoutes(app)
 
 // ==========================
 // Swagger

@@ -138,20 +138,13 @@
 				"type": "object",
 				"additionalProperties": true
 			},
-			"Error": {
+			"ErrorResponse": {
 				"properties": {
-					"name": {
-						"type": "string"
-					},
 					"message": {
-						"type": "string"
-					},
-					"stack": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"name",
 					"message"
 				],
 				"type": "object",
@@ -213,11 +206,7 @@
 				"tags": [
 					"Usuário"
 				],
-				"security": [
-					{
-						"bearerAuth": []
-					}
-				],
+				"security": [],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -234,7 +223,7 @@
 				"operationId": "FindAll",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "Lista de usuários",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -296,12 +285,15 @@
 				"operationId": "Update",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "Usuário atualizado",
 						"content": {
 							"application/json": {
 								"schema": {}
 							}
 						}
+					},
+					"404": {
+						"description": "Usuário não encontrado"
 					}
 				},
 				"tags": [
@@ -339,6 +331,9 @@
 				"responses": {
 					"204": {
 						"description": "Usuário removido"
+					},
+					"404": {
+						"description": "Usuário não encontrado"
 					}
 				},
 				"tags": [
@@ -372,80 +367,8 @@
 							"application/json": {
 								"schema": {
 									"properties": {
-										"jornadaCalculada": {
-											"properties": {
-												"minutosNoturnos": {
-													"type": "number",
-													"format": "double"
-												},
-												"minutosExtras": {
-													"type": "number",
-													"format": "double"
-												},
-												"minutosAtraso": {
-													"type": "number",
-													"format": "double"
-												},
-												"minutosTrabalhados": {
-													"type": "number",
-													"format": "double"
-												},
-												"escalaId": {
-													"type": "number",
-													"format": "double"
-												},
-												"id": {
-													"type": "number",
-													"format": "double"
-												},
-												"createdAt": {
-													"type": "string",
-													"format": "date-time"
-												}
-											},
-											"required": [
-												"minutosNoturnos",
-												"minutosExtras",
-												"minutosAtraso",
-												"minutosTrabalhados",
-												"escalaId",
-												"id",
-												"createdAt"
-											],
-											"type": "object"
-										},
-										"jornadaExecutada": {
-											"properties": {
-												"escalaId": {
-													"type": "number",
-													"format": "double"
-												},
-												"id": {
-													"type": "number",
-													"format": "double"
-												},
-												"createdAt": {
-													"type": "string",
-													"format": "date-time"
-												},
-												"fimExecutado": {
-													"type": "string",
-													"format": "date-time"
-												},
-												"inicioExecutado": {
-													"type": "string",
-													"format": "date-time"
-												}
-											},
-											"required": [
-												"escalaId",
-												"id",
-												"createdAt",
-												"fimExecutado",
-												"inicioExecutado"
-											],
-											"type": "object"
-										}
+										"jornadaCalculada": {},
+										"jornadaExecutada": {}
 									},
 									"required": [
 										"jornadaCalculada",
@@ -487,94 +410,7 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {
-									"items": {
-										"allOf": [
-											{
-												"properties": {
-													"escala": {
-														"properties": {
-															"deletedAt": {
-																"type": "string",
-																"format": "date-time"
-															},
-															"updatedAt": {
-																"type": "string",
-																"format": "date-time"
-															},
-															"dataFim": {
-																"type": "string",
-																"format": "date-time"
-															},
-															"dataInicio": {
-																"type": "string",
-																"format": "date-time"
-															},
-															"nome": {
-																"type": "string"
-															},
-															"id": {
-																"type": "number",
-																"format": "double"
-															},
-															"createdAt": {
-																"type": "string",
-																"format": "date-time"
-															}
-														},
-														"required": [
-															"deletedAt",
-															"updatedAt",
-															"dataFim",
-															"dataInicio",
-															"nome",
-															"id",
-															"createdAt"
-														],
-														"type": "object"
-													}
-												},
-												"required": [
-													"escala"
-												],
-												"type": "object"
-											},
-											{
-												"properties": {
-													"escalaId": {
-														"type": "number",
-														"format": "double"
-													},
-													"id": {
-														"type": "number",
-														"format": "double"
-													},
-													"createdAt": {
-														"type": "string",
-														"format": "date-time"
-													},
-													"fimExecutado": {
-														"type": "string",
-														"format": "date-time"
-													},
-													"inicioExecutado": {
-														"type": "string",
-														"format": "date-time"
-													}
-												},
-												"required": [
-													"escalaId",
-													"id",
-													"createdAt",
-													"fimExecutado",
-													"inicioExecutado"
-												],
-												"type": "object"
-											}
-										]
-									},
-									"type": "array"
-								}
+								"schema": {}
 							}
 						}
 					}
@@ -598,91 +434,7 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {
-									"allOf": [
-										{
-											"properties": {
-												"escala": {
-													"properties": {
-														"deletedAt": {
-															"type": "string",
-															"format": "date-time"
-														},
-														"updatedAt": {
-															"type": "string",
-															"format": "date-time"
-														},
-														"dataFim": {
-															"type": "string",
-															"format": "date-time"
-														},
-														"dataInicio": {
-															"type": "string",
-															"format": "date-time"
-														},
-														"nome": {
-															"type": "string"
-														},
-														"id": {
-															"type": "number",
-															"format": "double"
-														},
-														"createdAt": {
-															"type": "string",
-															"format": "date-time"
-														}
-													},
-													"required": [
-														"deletedAt",
-														"updatedAt",
-														"dataFim",
-														"dataInicio",
-														"nome",
-														"id",
-														"createdAt"
-													],
-													"type": "object"
-												}
-											},
-											"required": [
-												"escala"
-											],
-											"type": "object"
-										},
-										{
-											"properties": {
-												"escalaId": {
-													"type": "number",
-													"format": "double"
-												},
-												"id": {
-													"type": "number",
-													"format": "double"
-												},
-												"createdAt": {
-													"type": "string",
-													"format": "date-time"
-												},
-												"fimExecutado": {
-													"type": "string",
-													"format": "date-time"
-												},
-												"inicioExecutado": {
-													"type": "string",
-													"format": "date-time"
-												}
-											},
-											"required": [
-												"escalaId",
-												"id",
-												"createdAt",
-												"fimExecutado",
-												"inicioExecutado"
-											],
-											"type": "object"
-										}
-									]
-								}
+								"schema": {}
 							}
 						}
 					},
@@ -717,38 +469,7 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {
-									"properties": {
-										"escalaId": {
-											"type": "number",
-											"format": "double"
-										},
-										"id": {
-											"type": "number",
-											"format": "double"
-										},
-										"createdAt": {
-											"type": "string",
-											"format": "date-time"
-										},
-										"fimExecutado": {
-											"type": "string",
-											"format": "date-time"
-										},
-										"inicioExecutado": {
-											"type": "string",
-											"format": "date-time"
-										}
-									},
-									"required": [
-										"escalaId",
-										"id",
-										"createdAt",
-										"fimExecutado",
-										"inicioExecutado"
-									],
-									"type": "object"
-								}
+								"schema": {}
 							}
 						}
 					},
@@ -847,7 +568,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Error"
+									"$ref": "#/components/schemas/ErrorResponse"
 								}
 							}
 						}
@@ -873,7 +594,7 @@
 	},
 	"servers": [
 		{
-			"url": "/api"
+			"url": "/"
 		}
 	]
 }

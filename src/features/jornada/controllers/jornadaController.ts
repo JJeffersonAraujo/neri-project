@@ -1,4 +1,3 @@
-// src/features/jornada/controllers/jornadaController.ts
 import {
   Body,
   Controller,
@@ -17,7 +16,6 @@ import {
 import { JornadaService } from '../services/jornadaService.js'
 import type { RegistrarExecucaoDTO } from '../dtos/registrarExecucaoDTO.js'
 import type { UpdateExecucaoDTO } from '../dtos/updateExecucaoDTO.js'
-
 
 @Route('jornadas')
 @Tags('Jornada')
@@ -39,7 +37,9 @@ export class JornadaController extends Controller {
   public async registrar(
     @Body() body: RegistrarExecucaoDTO
   ) {
-    return this.jornadaService.registrarExecucao(body)
+    const result = await this.jornadaService.registrarExecucao(body)
+    this.setStatus(201)
+    return result
   }
 
   // ==========================
@@ -62,7 +62,7 @@ export class JornadaController extends Controller {
 
     if (!jornada) {
       this.setStatus(404)
-      return
+      return { message: 'Jornada não encontrada' }
     }
 
     return jornada
@@ -92,5 +92,6 @@ export class JornadaController extends Controller {
     @Path() id: number
   ): Promise<void> {
     await this.jornadaService.deletar(id)
+    this.setStatus(204)
   }
 }

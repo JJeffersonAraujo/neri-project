@@ -7,7 +7,7 @@
     "name": "swagger",
     "outputDirectory": "src/config/swagger",
     "specVersion": 3,
-    "basePath": "/api",
+    "noImplicitAdditionalProperties": "throw-on-extras",
     "securityDefinitions": {
       "bearerAuth": {
         "type": "http",
