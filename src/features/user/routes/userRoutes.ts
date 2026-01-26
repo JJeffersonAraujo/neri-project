@@ -1,21 +1,4 @@
 import { Router } from 'express'
-/*import { authRoutes } from './features/auth/routes/authRoutes'*/
-import { adminRoutes } from '../../Admin/routes/admin.routes.js'
-import { clienteRoutes } from '../../cliente/routes/cliente.routes.js'
-import { gestorRoutes } from '../../gestor/routes/gestor.routes.js'
-import { profissionalRoutes } from '../../profissionalSaude/routes/profissionalSaude.routes.js'
-
-const routes = Router()
-
-/*routes.use('/auth', authRoutes)*/
-routes.use('/admins', adminRoutes)
-routes.use('/clientes', clienteRoutes)
-routes.use('/gestores', gestorRoutes)
-routes.use('/profsaude', profissionalRoutes)
-export { routes }
-
-
-/*import { Router } from 'express'
 import { UserController } from '../controllers/userControllers.js'
 import { authMiddleware } from '../../../shared/middleware/authMiddlewares.js'
 
@@ -65,7 +48,7 @@ const controller = new UserController()
  *       400:
  *         description: Dados inválidos
  */
-//router.post('/users', controller.create.bind(controller))
+router.post('/users', controller.create.bind(controller))
 
 /**
  * @swagger
@@ -79,7 +62,7 @@ const controller = new UserController()
  *       200:
  *         description: Lista de usuários
  */
-//router.get('/users', authMiddleware, controller.findAll.bind(controller))
+router.get('/users', authMiddleware, controller.findAll.bind(controller))
 
 /**
  * @swagger
@@ -101,7 +84,7 @@ const controller = new UserController()
  *       404:
  *         description: Usuário não encontrado
  */
-//router.get('/users/:id', authMiddleware, controller.findById.bind(controller))
+router.get('/users/:id', authMiddleware, controller.findById.bind(controller))
 
 /**
  * @swagger
@@ -136,7 +119,7 @@ const controller = new UserController()
  *       200:
  *         description: Usuário atualizado
  */
-//router.put('/users/:id', authMiddleware, controller.update.bind(controller))
+router.put('/users/:id', authMiddleware, controller.update.bind(controller))
 
 /**
  * @swagger
@@ -156,6 +139,6 @@ const controller = new UserController()
  *       204:
  *         description: Usuário removido
  */
-//router.delete('/users/:id', authMiddleware, controller.delete.bind(controller))
+router.delete('/users/:id', authMiddleware, controller.delete.bind(controller))
 
-//export { router as userRoutes }*/
+export { router as userRoutes }
