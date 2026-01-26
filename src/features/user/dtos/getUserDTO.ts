@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { AdminController, profissionalSaudeController, gestorController, clienteController } from '../../user/controllers/userControllers'
+import { AdminController, profissionalSaudeController, gestorController, clienteController } from '../../user/controllers/userControllers.js'
 import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware'
 
 const router = Router()

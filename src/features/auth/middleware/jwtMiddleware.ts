@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { jwtConfig } from '../../../shared/utils/jwt.util'
-import '../../../shared/types/express.types'
+import { jwtConfig } from '../../../shared/utils/jwt.util.js'
+import '../../../shared/types/express.types.js'
 
 export function authMiddleware(
   req: Request,
