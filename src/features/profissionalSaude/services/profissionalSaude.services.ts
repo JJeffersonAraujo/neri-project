@@ -1,5 +1,5 @@
 import { prisma } from '../../../shared/database/prismaClient.js'
-import { Role } from '@prisma/client'
+import {Role} } from '@prisma/client'
 
 export class profissionalService {
   static async create(data: any) {

@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { profissionalController } from '../controller/profissionalSaude.controller.js'
-import { authMiddleware } from '../../../features/auth/middleware/jwtMiddleware.js'
+import { profissionalController } from '../controllers/profissionalSaude.controller.js'
+import { authMiddleware } from '../../../shared/middleware/authMiddlewares.js'
 import { authorize } from '@/shared/middleware/authorize.middleware.js'
 import { validateDto } from '../../../shared/middleware/validateDto.middleware.js'
 import { createProfissionalSaudeSchema } from '../dtos/profissionalSaude.dtos.js'
