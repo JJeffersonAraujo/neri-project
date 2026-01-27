@@ -239,4 +239,5 @@ Testes essenciais:
 - Pipeline CI/CD
 - Deploy em cloud
 
-======================================================================
+### Aplicação disponível em
+http://localhost:3000
