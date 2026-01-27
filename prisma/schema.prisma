@@ -1,7 +1,9 @@
+// Generator para criar o Prisma Client
 generator client {
   provider = "prisma-client-js"
 }
 
+// Datasource
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -20,7 +22,6 @@ enum Role {
 /*
  MODELS
 */
-
 model Usuario {
   id         Int      @id @default(autoincrement())
   nome       String
@@ -64,7 +65,7 @@ model TipoProfissional {
 
 model Profissional {
   id                Int      @id @default(autoincrement())
-  usuarioId          Int      @unique
+  usuarioId         Int      @unique
   tipoProfissionalId Int
   conselho           String
   numeroRegistro     String
@@ -72,11 +73,9 @@ model Profissional {
   updatedAt          DateTime @updatedAt
   deletedAt          DateTime?
 
-  usuario          Usuario         @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuario          Usuario          @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   tipoProfissional TipoProfissional @relation(fields: [tipoProfissionalId], references: [id])
   plantoes         Plantao[]
-
-  @@index([tipoProfissionalId])
 }
 
 model Escala {
@@ -88,7 +87,9 @@ model Escala {
   updatedAt  DateTime @updatedAt
   deletedAt  DateTime?
 
-  plantoes Plantao[]
+  plantoes           Plantao[]
+  jornadaExecutadas  JornadaExecutada[]
+  jornadaCalculadas  JornadaCalculada[]
 }
 
 model Plantao {
@@ -102,43 +103,14 @@ model Plantao {
   updatedAt      DateTime @updatedAt
   deletedAt      DateTime?
 
-  escala       Escala       @relation(fields: [escalaId], references: [id])
+  escala       Escala       @relation(fields: [escalaId], references: [id], onDelete: Cascade)
   profissional Profissional @relation(fields: [profissionalId], references: [id])
   atividades   Atividade[]
-
-  @@index([data])
-}
-
-model Paciente {
-  id             Int      @id @default(autoincrement())
-  nome           String
-  dataNascimento DateTime
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  deletedAt      DateTime?
-
-  atendimentos Atendimento[]
-}
-
-model Atendimento {
-  id         Int      @id @default(autoincrement())
-  pacienteId Int
-  descricao  String
-  horario    DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  deletedAt  DateTime?
-
-  paciente   Paciente   @relation(fields: [pacienteId], references: [id])
-  atividades Atividade[]
-
-  @@index([pacienteId])
 }
 
 model Atividade {
   id                 Int      @id @default(autoincrement())
   plantaoId          Int
-  atendimentoId      Int
   tipoProfissionalId Int
   descricao          String
   horario            DateTime
@@ -146,9 +118,28 @@ model Atividade {
   updatedAt          DateTime @updatedAt
   deletedAt          DateTime?
 
-  plantao         Plantao         @relation(fields: [plantaoId], references: [id])
-  atendimento     Atendimento     @relation(fields: [atendimentoId], references: [id])
+  plantao         Plantao         @relation(fields: [plantaoId], references: [id], onDelete: Cascade)
   tipoProfissional TipoProfissional @relation(fields: [tipoProfissionalId], references: [id])
+}
 
-  @@index([plantaoId])
+model JornadaExecutada {
+  id              Int      @id @default(autoincrement())
+  escalaId        Int
+  inicioExecutado DateTime
+  fimExecutado    DateTime
+  createdAt       DateTime @default(now())
+
+  escala Escala @relation(fields: [escalaId], references: [id], onDelete: Cascade)
+}
+
+model JornadaCalculada {
+  id                 Int      @id @default(autoincrement())
+  escalaId           Int
+  minutosTrabalhados Int
+  minutosAtraso      Int
+  minutosExtras      Int
+  minutosNoturnos    Int
+  createdAt          DateTime @default(now())
+
+  escala Escala @relation(fields: [escalaId], references: [id], onDelete: Cascade)
 }

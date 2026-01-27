@@ -1,9 +1,19 @@
-import { Router } from 'express';
-import { AuthController } from '../controllers/authController';
+import { Router } from "express";
+import { AuthController } from "../controllers/authController.js";
 
-const authRoutes = Router();
-const authController = new AuthController();
+const router = Router();
+const controller = new AuthController();
 
-authRoutes.post('/login', authController.login.bind(authController));
+/**
+ * POST /api/auth/login
+ */
+router.post("/login", async (req, res, next) => {
+  try {
+    const result = await controller.login(req.body);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-export { authRoutes };
+export { router as authRoutes };

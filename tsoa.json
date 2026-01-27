@@ -1,0 +1,23 @@
+{
+  "entryFile": "src/index.ts",
+  "controllerPathGlobs": [
+    "src/features/**/controllers/*.ts"
+  ],
+  "spec": {
+    "name": "swagger",
+    "outputDirectory": "src/config/swagger",
+    "specVersion": 3,
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "securityDefinitions": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "src/routes",
+    "authenticationModule": "./src/shared/middleware/expressAuthentication.ts"
+  }
+}

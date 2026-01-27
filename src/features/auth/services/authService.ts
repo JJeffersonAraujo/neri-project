@@ -1,44 +1,70 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs'
+import { prisma } from '../../../config/database'
+import { JwtUtils } from '../../../shared/utils/jwtUtils'
 
-import { LoginDTO } from '../dtos/loginDTO';
-import { UserRepository } from '../../user/repositories/userRepository';
-import { jwtConfig } from '../../../config/jwt';
+interface LoginDTO {
+  email: string
+  senha: string
+}
 
 export class AuthService {
-  private userRepository = new UserRepository();
-
-  async login(data: LoginDTO) {
-    const user = await this.userRepository.findByEmail(data.email);
+  async login({ email, senha }: LoginDTO) {
+    const user = await prisma.usuario.findUnique({
+      where: { email },
+    })
 
     if (!user) {
-      throw new Error('Invalid email or password');
+      throw new Error('Credenciais inválidas')
     }
 
     const passwordMatch = await bcrypt.compare(
-      data.password,
-      user.password
-    );
+      senha,
+      user.senhaHash
+    )
 
     if (!passwordMatch) {
-      throw new Error('Invalid email or password');
+      throw new Error('Credenciais inválidas')
     }
 
-    const token = jwt.sign(
-      { userId: user.id },
-      jwtConfig.secret as jwt.Secret,
-      {
-        expiresIn: jwtConfig.expiresIn as jwt.SignOptions['expiresIn'],
-      }
-    );
+    // ✅ Payload padronizado
+    const payload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    }
+
+    const token = JwtUtils.signAccessToken(payload)
+    const refreshToken = JwtUtils.signRefreshToken(payload)
 
     return {
       token,
+      refreshToken,
       user: {
         id: user.id,
-        name: user.name,
+        nome: user.nome,
         email: user.email,
+        role: user.role,
       },
-    };
+    }
+  }
+
+  async refreshToken(refreshToken: string) {
+    const payload = JwtUtils.verifyRefreshToken(refreshToken)
+
+    // ✅ Reemite access token com payload completo
+    const token = JwtUtils.signAccessToken({
+      id: payload.id,
+      email: payload.email,
+      role: payload.role,
+    })
+
+    return { token }
+  }
+
+  async logout(refreshToken: string) {
+    await prisma.authSessao.updateMany({
+      where: { token: refreshToken },
+      data: { deletedAt: new Date() },
+    })
   }
 }
