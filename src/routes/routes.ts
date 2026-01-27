@@ -4,12 +4,12 @@
 import type { TsoaRoute } from '@tsoa/runtime';
 import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './../features/user/controllers/userControllers';
+import { UserController } from './../features/user/controllers/userControllers.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { JornadaController } from './../features/jornada/controllers/jornadaController';
+import { JornadaController } from './../features/jornada/controllers/jornadaController.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { AuthController } from './../features/auth/controllers/authController';
-import { expressAuthentication } from './../shared/middleware/expressAuthentication';
+import { AuthController } from './../features/auth/controllers/authController.js';
+import { expressAuthentication } from './../shared/middleware/expressAuthentication.js';
 // @ts-ignore - no great way to install types from subpackage
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 

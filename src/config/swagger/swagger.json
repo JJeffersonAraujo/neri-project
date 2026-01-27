@@ -367,8 +367,80 @@
 							"application/json": {
 								"schema": {
 									"properties": {
-										"jornadaCalculada": {},
-										"jornadaExecutada": {}
+										"jornadaCalculada": {
+											"properties": {
+												"minutosNoturnos": {
+													"type": "number",
+													"format": "double"
+												},
+												"minutosExtras": {
+													"type": "number",
+													"format": "double"
+												},
+												"minutosAtraso": {
+													"type": "number",
+													"format": "double"
+												},
+												"minutosTrabalhados": {
+													"type": "number",
+													"format": "double"
+												},
+												"escalaId": {
+													"type": "number",
+													"format": "double"
+												},
+												"id": {
+													"type": "number",
+													"format": "double"
+												},
+												"createdAt": {
+													"type": "string",
+													"format": "date-time"
+												}
+											},
+											"required": [
+												"minutosNoturnos",
+												"minutosExtras",
+												"minutosAtraso",
+												"minutosTrabalhados",
+												"escalaId",
+												"id",
+												"createdAt"
+											],
+											"type": "object"
+										},
+										"jornadaExecutada": {
+											"properties": {
+												"escalaId": {
+													"type": "number",
+													"format": "double"
+												},
+												"id": {
+													"type": "number",
+													"format": "double"
+												},
+												"createdAt": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"fimExecutado": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"inicioExecutado": {
+													"type": "string",
+													"format": "date-time"
+												}
+											},
+											"required": [
+												"escalaId",
+												"id",
+												"createdAt",
+												"fimExecutado",
+												"inicioExecutado"
+											],
+											"type": "object"
+										}
 									},
 									"required": [
 										"jornadaCalculada",
@@ -410,7 +482,94 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"items": {
+										"allOf": [
+											{
+												"properties": {
+													"escala": {
+														"properties": {
+															"deletedAt": {
+																"type": "string",
+																"format": "date-time"
+															},
+															"updatedAt": {
+																"type": "string",
+																"format": "date-time"
+															},
+															"dataFim": {
+																"type": "string",
+																"format": "date-time"
+															},
+															"dataInicio": {
+																"type": "string",
+																"format": "date-time"
+															},
+															"nome": {
+																"type": "string"
+															},
+															"id": {
+																"type": "number",
+																"format": "double"
+															},
+															"createdAt": {
+																"type": "string",
+																"format": "date-time"
+															}
+														},
+														"required": [
+															"deletedAt",
+															"updatedAt",
+															"dataFim",
+															"dataInicio",
+															"nome",
+															"id",
+															"createdAt"
+														],
+														"type": "object"
+													}
+												},
+												"required": [
+													"escala"
+												],
+												"type": "object"
+											},
+											{
+												"properties": {
+													"escalaId": {
+														"type": "number",
+														"format": "double"
+													},
+													"id": {
+														"type": "number",
+														"format": "double"
+													},
+													"createdAt": {
+														"type": "string",
+														"format": "date-time"
+													},
+													"fimExecutado": {
+														"type": "string",
+														"format": "date-time"
+													},
+													"inicioExecutado": {
+														"type": "string",
+														"format": "date-time"
+													}
+												},
+												"required": [
+													"escalaId",
+													"id",
+													"createdAt",
+													"fimExecutado",
+													"inicioExecutado"
+												],
+												"type": "object"
+											}
+										]
+									},
+									"type": "array"
+								}
 							}
 						}
 					}
@@ -434,7 +593,106 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"anyOf": [
+										{
+											"allOf": [
+												{
+													"properties": {
+														"escala": {
+															"properties": {
+																"deletedAt": {
+																	"type": "string",
+																	"format": "date-time"
+																},
+																"updatedAt": {
+																	"type": "string",
+																	"format": "date-time"
+																},
+																"dataFim": {
+																	"type": "string",
+																	"format": "date-time"
+																},
+																"dataInicio": {
+																	"type": "string",
+																	"format": "date-time"
+																},
+																"nome": {
+																	"type": "string"
+																},
+																"id": {
+																	"type": "number",
+																	"format": "double"
+																},
+																"createdAt": {
+																	"type": "string",
+																	"format": "date-time"
+																}
+															},
+															"required": [
+																"deletedAt",
+																"updatedAt",
+																"dataFim",
+																"dataInicio",
+																"nome",
+																"id",
+																"createdAt"
+															],
+															"type": "object"
+														}
+													},
+													"required": [
+														"escala"
+													],
+													"type": "object"
+												},
+												{
+													"properties": {
+														"escalaId": {
+															"type": "number",
+															"format": "double"
+														},
+														"id": {
+															"type": "number",
+															"format": "double"
+														},
+														"createdAt": {
+															"type": "string",
+															"format": "date-time"
+														},
+														"fimExecutado": {
+															"type": "string",
+															"format": "date-time"
+														},
+														"inicioExecutado": {
+															"type": "string",
+															"format": "date-time"
+														}
+													},
+													"required": [
+														"escalaId",
+														"id",
+														"createdAt",
+														"fimExecutado",
+														"inicioExecutado"
+													],
+													"type": "object"
+												}
+											]
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
 							}
 						}
 					},
@@ -469,7 +727,38 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"properties": {
+										"escalaId": {
+											"type": "number",
+											"format": "double"
+										},
+										"id": {
+											"type": "number",
+											"format": "double"
+										},
+										"createdAt": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"fimExecutado": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"inicioExecutado": {
+											"type": "string",
+											"format": "date-time"
+										}
+									},
+									"required": [
+										"escalaId",
+										"id",
+										"createdAt",
+										"fimExecutado",
+										"inicioExecutado"
+									],
+									"type": "object"
+								}
 							}
 						}
 					},
