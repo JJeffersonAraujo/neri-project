@@ -198,20 +198,32 @@ Características:
 
 ----------------------------------------------------------------------
 
-## 10. TESTES MANUAIS
+## 10. Testes e Qualidade
 ----------------------------------------------------------------------
 
-Ferramentas recomendadas:
-- Swagger UI
-- Postman
-- Insomnia
+Atualmente, a API é validada manualmente por meio do Swagger UI
+e Postman, cobrindo os principais fluxos funcionais e de segurança.
 
-Testes essenciais:
-- Login válido e inválido
-- Acesso a rotas protegidas sem token
-- Acesso com token inválido
-- Refresh token
+### Cenários validados
+
+- Login com credenciais válidas e inválidas
+- Acesso a endpoints protegidos sem autenticação
+- Acesso com token inválido ou expirado
+- Renovação de sessão com Refresh Token
 - Logout e revogação de sessão
+- Cadastro e validação de usuários
+- Regras de cálculo de jornada
+
+### Evolução planejada
+
+A suíte automatizada será implementada em duas camadas:
+
+- **Testes unitários:** regras de negócio e services
+- **Testes de integração:** controllers, autenticação e endpoints REST
+
+Ferramentas previstas:
+- Vitest ou Jest
+- Supertest
 
 ----------------------------------------------------------------------
 
